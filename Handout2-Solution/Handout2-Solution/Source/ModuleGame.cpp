@@ -166,7 +166,7 @@ bool ModuleGame::Start()
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
-	bg = LoadTexture("Assets/pinball.jpg");
+	bg = LoadTexture("Assets/pinball.png");
 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
@@ -186,6 +186,8 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	DrawTexture(bg, 0, 0, WHITE);
+
 	if (IsKeyPressed(KEY_SPACE))
 	{
 		ray_on = !ray_on;
