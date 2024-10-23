@@ -62,7 +62,7 @@ class Box : public PhysicEntity
 {
 public:
 	Box(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50, b2_dynamicBody), _listener)
+		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50, b2_dynamicBody, 0), _listener)
 		, texture(_texture)
 	{
 

@@ -35,10 +35,10 @@ bool ModulePhysics::Start()
 	int y = (int)(SCREEN_HEIGHT);
 	int diameter = SCREEN_WIDTH / 2;
 
-	CreateRectangle(x/2,		 y,		x, 20, b2_staticBody);
-	CreateRectangle(x/2,		 0,		x, 20, b2_staticBody);
-	CreateRectangle(  0,	 y / 2,	   20,  y, b2_staticBody);
-	CreateRectangle(  x,	 y / 2,	   20,  y, b2_staticBody);
+	CreateRectangle(x/2,		 y,		x, 20, b2_staticBody, 0);
+	CreateRectangle(x/2,		 0,		x, 20, b2_staticBody, 0);
+	CreateRectangle(  0,	 y / 2,	   20,  y, b2_staticBody, 0);
+	CreateRectangle(  x,	 y / 2,	   20,  y, b2_staticBody, 0);
 
 	return true;
 }
@@ -89,13 +89,14 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, int rotation)
 {
 	PhysBody* pbody = new PhysBody();
 
 	b2BodyDef body;
 	body.type = Type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
 	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
 
 	b2Body* b = world->CreateBody(&body);
