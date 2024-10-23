@@ -166,6 +166,7 @@ bool ModuleGame::Start()
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
+	bg = LoadTexture("Assets/pinball.jpg");
 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
