@@ -169,7 +169,7 @@ bool ModuleGame::Start()
 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1);
 
 	return ret;
 }

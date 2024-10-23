@@ -34,11 +34,17 @@ bool ModulePhysics::Start()
 	int x = (int)(SCREEN_WIDTH);
 	int y = (int)(SCREEN_HEIGHT);
 	int diameter = SCREEN_WIDTH / 2;
-
-	CreateRectangle(x/2,		 y,		x, 20, b2_staticBody, 0);
+	
+	//Limits
+	CreateRectangle(0,		 y,		x*0.75, 20, b2_staticBody, 0);
+	CreateRectangle(x,      y,     x*0.75, 20, b2_staticBody, 0);
 	CreateRectangle(x/2,		 0,		x, 20, b2_staticBody, 0);
 	CreateRectangle(  0,	 y / 2,	   20,  y, b2_staticBody, 0);
 	CreateRectangle(  x,	 y / 2,	   20,  y, b2_staticBody, 0);
+
+	//Obstacles
+	CreateRectangleRebote(x/1.25, y/1.25, 30, 250, b2_staticBody, 48);
+
 
 	return true;
 }
@@ -52,17 +58,27 @@ update_status ModulePhysics::PreUpdate()
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
 			b2BodyUserData data1 = c->GetFixtureA()->GetBody()->GetUserData();
-			b2BodyUserData data2 = c->GetFixtureA()->GetBody()->GetUserData();
+			b2BodyUserData data2 = c->GetFixtureB()->GetBody()->GetUserData();
 
 			PhysBody* pb1 = (PhysBody*)data1.pointer;
 			PhysBody* pb2 = (PhysBody*)data2.pointer;
-			if (pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2);
+
+			// Verificar si pb2 es la pelota
+			if (pb2 && pb2->body) {
+				// Cambiar la posición de la pelota a un nuevo lugar
+				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH / 2), PIXEL_TO_METERS(SCREEN_HEIGHT*0.10)), pb2->body->GetAngle());
+
+				// Reiniciar la velocidad para evitar aceleración infinita
+				pb2->body->SetLinearVelocity(b2Vec2(0, 0));
+				pb2->body->SetAngularVelocity(0);
+			}
 		}
 	}
 
 	return UPDATE_CONTINUE;
 }
+
+
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
@@ -89,6 +105,34 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, int rotation)
+{
+	PhysBody* pbody = new PhysBody();
+
+	b2BodyDef body;
+	body.type = Type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.restitution = 2.0f; 
+
+	b->CreateFixture(&fixture);
+
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
+	return pbody;
+}
+
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, int rotation)
 {
 	PhysBody* pbody = new PhysBody();
@@ -106,6 +150,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.5f;
 
 	b->CreateFixture(&fixture);
 
