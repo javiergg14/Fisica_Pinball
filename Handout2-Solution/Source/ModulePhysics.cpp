@@ -36,14 +36,36 @@ bool ModulePhysics::Start()
 	int diameter = SCREEN_WIDTH / 2;
 	
 	//Limits
-	CreateRectangle(0,		 y,		x*0.75, 20, b2_staticBody, 0);
-	CreateRectangle(x,      y,     x*0.75, 20, b2_staticBody, 0);
+	CreateRectangle(145,      865,     225, 20, b2_staticBody, 0.55);
+	CreateRectangle(50, 740, 50, 10, b2_staticBody, 0.6);
+	CreateRectangle(68, 780, 10, 60, b2_staticBody, 0);
+	CreateRectangle(243, 933, 10, 30, b2_staticBody, -0.05);
+
+	CreateRectangle(470, 865, 210, 15, b2_staticBody, -0.55);
+	CreateRectangle(380, 933, 10, 30, b2_staticBody, 0.05);
+
+	CreateRectangle(68, 540, 5, 320, b2_staticBody, 0);
+
 	CreateRectangle(x/2,		 0,		x, 20, b2_staticBody, 0);
-	CreateRectangle(  0,	 y / 2,	   20,  y, b2_staticBody, 0);
-	CreateRectangle(  x,	 y / 2,	   20,  y, b2_staticBody, 0);
+
+	CreateRectangle(  8,	 y / 2,	   50,  y, b2_staticBody, 0);
+
+	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
+	CreateRectangle(  560,	 580,	   5,  740, b2_staticBody, 0);
+	CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
 
 	//Obstacles
-	CreateRectangleRebote(x/1.25, y/1.25, 30, 250, b2_staticBody, 48);
+	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
+	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f);
+	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53);
+	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53);
+	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0);
+	CreateRectangle(470, 695, 10, 90, b2_staticBody, 0);
+
+	CreateRectangle(160, 800, 115, 23, b2_staticBody, 0.53);
+	CreateRectangle(463, 800, 115, 23, b2_staticBody, -0.53);
+	CreateRectangle(112, 710, 5, 145, b2_staticBody, 0);
+	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0);
 
 
 	return true;
@@ -66,8 +88,19 @@ update_status ModulePhysics::PreUpdate()
 			// Verificar si pb2 es la pelota
 			if (pb2 && pb2->body) {
 				// Cambiar la posición de la pelota a un nuevo lugar
-				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH / 2), PIXEL_TO_METERS(SCREEN_HEIGHT*0.10)), pb2->body->GetAngle());
+				float timer = 0.0f;
+				bool waiting = true;
 
+				//while (!WindowShouldClose()) {
+				//	// Actualizar el temporizador
+				//	if (waiting) {
+				//		timer += GetFrameTime(); // Tiempo desde el último frame
+				//		if (timer >= 2.0f) { // 2 segundos
+				//			waiting = false; // Terminar la espera
+				//		}
+				//	}
+				//}
+				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 1)), pb2->body->GetAngle());
 				// Reiniciar la velocidad para evitar aceleración infinita
 				pb2->body->SetLinearVelocity(b2Vec2(0, 0));
 				pb2->body->SetAngularVelocity(0);
@@ -95,7 +128,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+	fixture.density = 0.3f;
 
 	b->CreateFixture(&fixture);
 
@@ -105,7 +138,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, int rotation)
+PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation)
 {
 	PhysBody* pbody = new PhysBody();
 
@@ -122,7 +155,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 2.0f; 
+	fixture.restitution = 4.0f; 
 
 	b->CreateFixture(&fixture);
 
@@ -133,7 +166,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, int rotation)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation)
 {
 	PhysBody* pbody = new PhysBody();
 
