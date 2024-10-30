@@ -8,10 +8,8 @@
 class PhysicEntity
 {
 protected:
-
 	PhysicEntity(PhysBody* _body, Module* _listener)
-		: body(_body)
-		, listener(_listener)
+		: body(_body), listener(_listener)
 	{
 		body->listener = listener;
 	}
@@ -19,6 +17,12 @@ protected:
 public:
 	virtual ~PhysicEntity() = default;
 	virtual void Update() = 0;
+
+	// Nuevo método GetBody()
+	PhysBody* GetBody() const
+	{
+		return body;
+	}
 
 	virtual int RayHit(vec2<int> ray, vec2<int> mouse, vec2<float>& normal)
 	{
@@ -34,10 +38,13 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 10), _listener)
-		, texture(_texture)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 10), _listener), texture(_texture)
 	{
+	}
 
+	void ApplyForce(const b2Vec2& force)
+	{
+		body->body->ApplyForceToCenter(force, true);
 	}
 
 	void Update() override
@@ -55,7 +62,6 @@ public:
 
 private:
 	Texture2D texture;
-
 };
 
 class Box : public PhysicEntity
@@ -167,10 +173,21 @@ bool ModuleGame::Start()
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
 	bg = LoadTexture("Assets/pinball.png");
-
+	kicker = LoadTexture("Assets/kicker.png"); 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1);
+
+
+	ballCount = maxBallCount; //ballz couunt
+
+	//kicker
+	kickerForce = 0.0f;
+	kickerChargeTime = 0.0f;
+	kickerActive = false;
+	kickerCollider = App->physics->CreateRectangle(575, 810, 32, 5, b2_staticBody, 0); //kicker
+	kickerCollider->listener = this; // Establecer el listener para detectar colisiones
+	
 
 	return ret;
 }
@@ -182,6 +199,14 @@ bool ModuleGame::CleanUp()
 
 	return true;
 }
+
+void ModuleGame::OnBallLost() {
+	ballCount++;
+	if (ballCount >= 3) {
+		gameOver = true;
+	}
+}
+
 
 // Update: draw background
 update_status ModuleGame::Update()
@@ -210,6 +235,60 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_THREE))
 	{
 		entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), this, rick));
+	}
+
+	// Kicker control
+	if (IsKeyDown(KEY_DOWN)) { //si se presiona down, encojer
+		kickerChargeTime += GetFrameTime();
+		if (kickerChargeTime > maxChargeTime) kickerChargeTime = maxChargeTime;
+		kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce;
+		isKickerShrinking = true;
+		isKickerGrowing = false;
+	}
+	else if (IsKeyReleased(KEY_DOWN)) {
+		if (isKickerShrinking) {
+			isKickerGrowing = true;
+			isKickerShrinking = false;
+			// Aplicar impulso a todos los círculos cuando se suelta la tecla
+			for (PhysicEntity* entity : entities) {
+				Circle* circleEntity = dynamic_cast<Circle*>(entity);
+				if (circleEntity) {
+					vec2<float> impulse(0, -kickerForce); // Impulso hacia arriba
+					circleEntity->GetBody()->body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
+				}
+			}
+			kickerChargeTime = 0.0f; // Resetear el tiempo de carga
+		}
+	}
+	// encojer kicker
+	if (isKickerShrinking) {
+		kickerScaleChangeRate = 0.005f;
+		kickerScale -= kickerScaleChangeRate;
+		if (kickerScale <= 0.3f) {
+			kickerScale = 0.3f;
+		}
+	}
+	// desencojer kicker
+	else if (isKickerGrowing) {
+		kickerScaleChangeRate = 0.05f;
+		kickerScale += kickerScaleChangeRate;
+		if (kickerScale >= 1.2f) {
+			kickerScale = 1.2f;
+			isKickerGrowing = false;
+		}
+	}
+	//collider del kicker
+	float kickerX = 575;
+	float kickerY = 804 + kicker.height * (1.2f - kickerScale);
+	kickerCollider->body->SetTransform(b2Vec2(kickerX / PIXELS_PER_METER, kickerY / PIXELS_PER_METER), kickerCollider->body->GetAngle());
+
+	// Dibujar el kicker
+	DrawTexturePro(kicker, Rectangle{ 0, 0, (float)kicker.width, (float)kicker.height }, Rectangle{ 575, 800 + kicker.height * (1.2f - kickerScale),
+		(float)kicker.width, (float)kicker.height * kickerScale }, Vector2{ (float)kicker.width / 2.0f, 0.0f }, 0.0f, WHITE);
+
+	//logica game over
+	if (gameOver) {
+		DrawText("Game Over!\nScore:  ", SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2, 40, WHITE);
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -256,7 +335,9 @@ update_status ModuleGame::Update()
 	return UPDATE_CONTINUE;
 }
 
+
 void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	App->audio->PlayFx(bonus_fx);
+
 }

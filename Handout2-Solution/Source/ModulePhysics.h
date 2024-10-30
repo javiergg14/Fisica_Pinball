@@ -18,8 +18,8 @@
 class PhysBody
 {
 public:
-	PhysBody() : listener(NULL), body(NULL)
-	{}
+	PhysBody() : listener(NULL), body(NULL) {}
+	
 
 	//void GetPosition(int& x, int& y) const;
 	void GetPhysicPosition(int& x, int& y) const;

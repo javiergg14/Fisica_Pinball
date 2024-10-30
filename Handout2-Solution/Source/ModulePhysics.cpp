@@ -52,7 +52,7 @@ bool ModulePhysics::Start()
 
 	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
 	CreateRectangle(  560,	 580,	   5,  740, b2_staticBody, 0);
-	CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
+	//CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
 
 	//Obstacles
 	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
