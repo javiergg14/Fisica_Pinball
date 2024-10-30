@@ -37,9 +37,8 @@ public:
     vec2<int> ray;
     bool ray_on;
 
-    int ballCount=0; // num bolas restantes
-    const int maxBallCount = 3; //max de bolas x partida
-    bool gameOver = false;
+   
+    
 
     //kicker
     PhysBody* kickerCollider;

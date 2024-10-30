@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
-
+#include "ModuleGame.h"
 #include "p2Point.h"
 
 #include <math.h>
@@ -74,9 +74,10 @@ bool ModulePhysics::Start()
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
-
+	
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
+		
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
 			b2BodyUserData data1 = c->GetFixtureA()->GetBody()->GetUserData();
@@ -86,8 +87,8 @@ update_status ModulePhysics::PreUpdate()
 			PhysBody* pb2 = (PhysBody*)data2.pointer;
 
 			// Verificar si pb2 es la pelota
-			if (pb2 && pb2->body) {
-				// Cambiar la posición de la pelota a un nuevo lugar
+			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
+				
 				float timer = 0.0f;
 				bool waiting = true;
 
@@ -100,18 +101,21 @@ update_status ModulePhysics::PreUpdate()
 				//		}
 				//	}
 				//}
-				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 1)), pb2->body->GetAngle());
+
+				// Cambiar la posición de la pelota a un nuevo lugar
+				ballCount++; //contador
+				if(ballCount <=2) {
+				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
 				// Reiniciar la velocidad para evitar aceleración infinita
 				pb2->body->SetLinearVelocity(b2Vec2(0, 0));
 				pb2->body->SetAngularVelocity(0);
+				}
 			}
 		}
 	}
 
 	return UPDATE_CONTINUE;
 }
-
-
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
@@ -260,6 +264,24 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 
 update_status ModulePhysics::PostUpdate()
 {
+	//Game Over Handling
+	if (ballCount == 3) {
+		gameOver = true;
+	}
+	if (gameOver) {
+		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, BLACK);
+		DrawText("Score:  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 40, 60, BLACK);
+
+		// Espera a que se presione la tecla de espacio para reiniciar
+		if (IsKeyPressed(KEY_SPACE)) {
+
+			gameOver = false;
+			ballCount = 0;
+			// Puedes añadir aquí cualquier otra inicialización de variables para reiniciar la partida
+		}
+
+	}
+	//Debug collisions show/hide
 	if (IsKeyPressed(KEY_F1))
 	{
 		debug = !debug;
@@ -269,6 +291,7 @@ update_status ModulePhysics::PostUpdate()
 	{
 		return UPDATE_CONTINUE;
 	}
+	
 
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels

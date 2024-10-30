@@ -59,6 +59,7 @@ public:
 
 	virtual update_status Update()
 	{
+
 		return UPDATE_CONTINUE;
 	}
 

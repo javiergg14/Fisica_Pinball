@@ -46,7 +46,6 @@ public:
 	{
 		body->body->ApplyForceToCenter(force, true);
 	}
-
 	void Update() override
 	{
 		int x, y;
@@ -178,9 +177,6 @@ bool ModuleGame::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1);
 
-
-	ballCount = maxBallCount; //ballz couunt
-
 	//kicker
 	kickerForce = 0.0f;
 	kickerChargeTime = 0.0f;
@@ -198,13 +194,6 @@ bool ModuleGame::CleanUp()
 	LOG("Unloading Intro scene");
 
 	return true;
-}
-
-void ModuleGame::OnBallLost() {
-	ballCount++;
-	if (ballCount >= 3) {
-		gameOver = true;
-	}
 }
 
 
@@ -287,9 +276,7 @@ update_status ModuleGame::Update()
 		(float)kicker.width, (float)kicker.height * kickerScale }, Vector2{ (float)kicker.width / 2.0f, 0.0f }, 0.0f, WHITE);
 
 	//logica game over
-	if (gameOver) {
-		DrawText("Game Over!\nScore:  ", SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2, 40, WHITE);
-	}
+	
 
 	// Prepare for raycast ------------------------------------------------------
 
