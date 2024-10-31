@@ -11,7 +11,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -46,7 +46,7 @@ bool ModulePhysics::Start()
 
 	CreateRectangle(68, 540, 5, 320, b2_staticBody, 0);
 
-	CreateRectangle(x/2,		 0,		x, 20, b2_staticBody, 0);
+	CreateRectangle(x/2,0,	x, 20, b2_staticBody, 0);
 
 	CreateRectangle(  8,	 y / 2,	   50,  y, b2_staticBody, 0);
 
@@ -271,15 +271,12 @@ update_status ModulePhysics::PostUpdate()
 	if (gameOver) {
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, BLACK);
 		DrawText("Score:  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 40, 60, BLACK);
-
 		// Espera a que se presione la tecla de espacio para reiniciar
 		if (IsKeyPressed(KEY_SPACE)) {
 
 			gameOver = false;
 			ballCount = 0;
-			// Puedes añadir aquí cualquier otra inicialización de variables para reiniciar la partida
 		}
-
 	}
 	//Debug collisions show/hide
 	if (IsKeyPressed(KEY_F1))
@@ -292,7 +289,6 @@ update_status ModulePhysics::PostUpdate()
 		return UPDATE_CONTINUE;
 	}
 	
-
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())

@@ -25,12 +25,12 @@ public:
     PhysBody* sensor;
     bool sensed;
 
-    Texture2D mainMenu;
+    Texture2D mainMenu; // textura menu
     Texture2D circle;
     Texture2D box;
     Texture2D rick;
     Texture2D bg;
-    Texture2D kicker;
+    Texture2D kicker; //textura kicker
 
     uint32 bonus_fx;
 
@@ -41,15 +41,15 @@ public:
     bool inMainMenu = true; //variable de menu
 
     //kicker
-    PhysBody* kickerCollider;
+    PhysBody* kickerCollider; //collider kicker
     float kickerForce = 0;  //fuerza del kicker segun el tiempo
     float kickerChargeTime = 0; //tiempo que se ha presionado la tecla
-    const float maxKickerForce = 1.25f; //fuerza max del kickr
-    const float maxChargeTime = 2.35f;   //tiempo max de carga 
+    const float maxKickerForce = 1.35f; //fuerza max del kickr
+    const float maxChargeTime = 2.25f;   //tiempo max de carga 
     bool kickerActive = false; //kicker flag
     float kickerScaleChangeRate = 0.01f; // ratio de cambio de la escala del kicker
-    float kickerScale = 1.2f;
-    bool isKickerShrinking = false; 
-    bool isKickerGrowing = false; 
+    float kickerScale = 1.0f; // escala de dibujo
+    bool isKickerShrinking = false; //flag kicker encojiendose
+    bool isKickerGrowing = false; //flag kicker creciendo
 
 };

@@ -201,13 +201,13 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
-	if (inMainMenu)  // Si estamos en el menú principal
+	if (inMainMenu)  // Si estamos en el menu principal
 	{
-		DrawTexture(mainMenu, 0, 0, WHITE);  // Dibuja la textura del menú principal
+		DrawTexture(mainMenu, 0, 0, WHITE); //dibujar
 
-		// Detecta si se presiona la tecla de espacio
+		//si se presiona espacio
 		if (IsKeyPressed(KEY_SPACE)) {
-			inMainMenu = false;  // Cambia el estado para salir del menú y comenzar el juego
+			inMainMenu = false; //salir del menu
 		}
 
 		return UPDATE_CONTINUE;
@@ -244,13 +244,13 @@ update_status ModuleGame::Update()
 	if (IsKeyDown(KEY_DOWN)) { //si se presiona down, encojer
 		kickerChargeTime += GetFrameTime();
 		if (kickerChargeTime > maxChargeTime) kickerChargeTime = maxChargeTime;
-		kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce;
-		isKickerShrinking = true;
-		isKickerGrowing = false;
+		kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce; //fuerza kicker depende tiempo de carga/maximo * fuerza max
+		isKickerShrinking = true; //kicker se encoje
+		isKickerGrowing = false; 
 	}
-	else if (IsKeyReleased(KEY_DOWN)) {
+	else if (IsKeyReleased(KEY_DOWN)) { // si se deja ir down:
 		if (isKickerShrinking) {
-			isKickerGrowing = true;
+			isKickerGrowing = true; //kicker crece a su estado normal
 			isKickerShrinking = false;
 			// Aplicar impulso a todos los círculos cuando se suelta la tecla
 			for (PhysicEntity* entity : entities) {
@@ -275,8 +275,8 @@ update_status ModuleGame::Update()
 	else if (isKickerGrowing) {
 		kickerScaleChangeRate = 0.05f;
 		kickerScale += kickerScaleChangeRate;
-		if (kickerScale >= 1.2f) {
-			kickerScale = 1.2f;
+		if (kickerScale >= 1.0f) {
+			kickerScale = 1.0f;
 			isKickerGrowing = false;
 		}
 	}
@@ -289,8 +289,6 @@ update_status ModuleGame::Update()
 	DrawTexturePro(kicker, Rectangle{ 0, 0, (float)kicker.width, (float)kicker.height }, Rectangle{ 575, 800 + kicker.height * (1.2f - kickerScale),
 		(float)kicker.width, (float)kicker.height * kickerScale }, Vector2{ (float)kicker.width / 2.0f, 0.0f }, 0.0f, WHITE);
 
-	//logica game over
-	
 
 	// Prepare for raycast ------------------------------------------------------
 

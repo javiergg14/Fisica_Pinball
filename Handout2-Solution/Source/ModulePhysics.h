@@ -52,7 +52,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	int ballCount = 0; // num bolas restantes
-	bool gameOver = false;
+	bool gameOver = false; //flag game over
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
