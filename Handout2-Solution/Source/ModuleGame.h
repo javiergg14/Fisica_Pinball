@@ -17,7 +17,6 @@ public:
     bool Start();
     update_status Update();
     bool CleanUp();
-    void OnBallLost();
     void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
@@ -26,6 +25,7 @@ public:
     PhysBody* sensor;
     bool sensed;
 
+    Texture2D mainMenu;
     Texture2D circle;
     Texture2D box;
     Texture2D rick;
@@ -38,7 +38,7 @@ public:
     bool ray_on;
 
    
-    
+    bool inMainMenu = true; //variable de menu
 
     //kicker
     PhysBody* kickerCollider;

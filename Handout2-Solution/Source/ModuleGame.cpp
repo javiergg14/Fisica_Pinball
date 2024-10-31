@@ -168,6 +168,7 @@ bool ModuleGame::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	mainMenu = LoadTexture("Assets/MainMenu.png");
 	circle = LoadTexture("Assets/wheel.png");
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
@@ -200,6 +201,19 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	if (inMainMenu)  // Si estamos en el menú principal
+	{
+		DrawTexture(mainMenu, 0, 0, WHITE);  // Dibuja la textura del menú principal
+
+		// Detecta si se presiona la tecla de espacio
+		if (IsKeyPressed(KEY_SPACE)) {
+			inMainMenu = false;  // Cambia el estado para salir del menú y comenzar el juego
+		}
+
+		return UPDATE_CONTINUE;
+	}
+
+
 	DrawTexture(bg, 0, 0, WHITE);
 
 	if (IsKeyPressed(KEY_SPACE))
