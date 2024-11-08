@@ -34,6 +34,148 @@ bool ModulePhysics::Start()
 	int x = (int)(SCREEN_WIDTH);
 	int y = (int)(SCREEN_HEIGHT);
 	int diameter = SCREEN_WIDTH / 2;
+	int pinball1[56] = {
+	590, 941,
+	588, 225,
+	582, 181,
+	569, 151,
+	555, 127,
+	528, 102,
+	505, 83,
+	475, 69,
+	449, 62,
+	416, 54,
+	375, 50,
+	345, 51,
+	312, 50,
+	277, 54,
+	253, 62,
+	236, 69,
+	209, 88,
+	187, 103,
+	174, 120,
+	165, 142,
+	161, 168,
+	161, 193,
+	168, 223,
+	176, 247,
+	185, 266,
+	190, 283,
+	182, 298,
+	179, 316
+	};
+
+	int pinball2[8] = {
+	153, 404,
+	148, 414,
+	149, 427,
+	146, 433
+	};
+	int pinball3[58] = {
+	68, 417,
+	76, 432,
+	83, 449,
+	90, 465,
+	96, 478,
+	103, 489,
+	108, 494,
+	99, 497,
+	92, 504,
+	90, 513,
+	93, 522,
+	98, 531,
+	105, 541,
+	112, 553,
+	119, 562,
+	126, 569,
+	130, 575,
+	119, 580,
+	109, 585,
+	101, 592,
+	92, 600,
+	84, 608,
+	77, 619,
+	73, 636,
+	71, 650,
+	71, 665,
+	70, 679,
+	70, 690,
+	70, 697
+	};
+	int pinball4[142] = {
+	551, 795,
+	551, 607,
+	547, 589,
+	535, 574,
+	515, 561,
+	496, 550,
+	477, 540,
+	455, 528,
+	439, 520,
+	424, 500,
+	427, 483,
+	436, 474,
+	447, 463,
+	453, 446,
+	458, 427,
+	463, 415,
+	472, 406,
+	462, 399,
+	461, 391,
+	470, 383,
+	485, 376,
+	507, 368,
+	522, 351,
+	530, 325,
+	533, 297,
+	528, 265,
+	522, 248,
+	512, 228,
+	498, 213,
+	483, 204,
+	465, 195,
+	444, 187,
+	420, 177,
+	397, 172,
+	380, 165,
+	373, 171,
+	356, 181,
+	336, 185,
+	322, 190,
+	305, 181,
+	288, 179,
+	275, 177,
+	262, 187,
+	254, 200,
+	244, 217,
+	242, 233,
+	232, 243,
+	215, 248,
+	203, 227,
+	197, 201,
+	200, 177,
+	209, 148,
+	231, 118,
+	261, 94,
+	280, 86,
+	319, 84,
+	346, 85,
+	360, 82,
+	387, 85,
+	410, 89,
+	437, 96,
+	458, 101,
+	484, 113,
+	505, 118,
+	524, 136,
+	536, 155,
+	548, 181,
+	554, 210,
+	561, 254,
+	559, 281,
+	559, 942
+	};
+
 	
 	//Limits
 	CreateRectangle(145,      865,     225, 20, b2_staticBody, 0.55);
@@ -53,10 +195,15 @@ bool ModulePhysics::Start()
 	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
 	CreateRectangle(  560,	 580,	   5,  740, b2_staticBody, 0);
 	//CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
+	CreateChain(0, 0, pinball1, 56);
+	CreateChain(0, 0, pinball2, 8);
+	CreateChain(0, 0, pinball3, 58);
+	CreateChain(0, 0, pinball4, 142);
 
 	//Obstacles
 	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
 	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f);
+	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f);
 	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53);
 	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53);
 	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0);
@@ -68,8 +215,12 @@ bool ModulePhysics::Start()
 	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0);
 
 
+
+
 	return true;
 }
+
+
 
 update_status ModulePhysics::PreUpdate()
 {
@@ -159,7 +310,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 4.0f; 
+	fixture.restitution = 2.0f; 
 
 	b->CreateFixture(&fixture);
 
@@ -231,7 +382,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	PhysBody* pbody = new PhysBody();
 
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
 
@@ -240,26 +391,34 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	b2ChainShape shape;
 	b2Vec2* p = new b2Vec2[size / 2];
 
+	// Copiar los puntos en el arreglo b2Vec2.
 	for (int i = 0; i < size / 2; ++i)
 	{
 		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 
-	shape.CreateLoop(p, size / 2);
+	// Usar prevVertex y nextVertex para no cerrar la cadena.
+	b2Vec2 prevVertex(0, 0);  
+	b2Vec2 nextVertex(0, 0);  
+
+	shape.CreateChain(p, size / 2, prevVertex, nextVertex);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.restitution = 0.5f;
 
 	b->CreateFixture(&fixture);
 
-	delete p;
+	delete[] p;  // Usar delete[] para liberar memoria de arreglos dinámicos
 
 	pbody->body = b;
 	pbody->width = pbody->height = 0;
 
 	return pbody;
 }
+
+
 
 
 update_status ModulePhysics::PostUpdate()
@@ -342,8 +501,6 @@ update_status ModulePhysics::PostUpdate()
 					prev = v;
 				}
 
-				v = b->GetWorldPoint(shape->m_vertices[0]);
-				DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
 			}
 			break;
 

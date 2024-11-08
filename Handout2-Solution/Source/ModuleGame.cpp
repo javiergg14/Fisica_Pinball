@@ -131,8 +131,9 @@ public:
 			30, 62
 	};
 
+
 	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX() - 50, GetMouseY() - 100, rick_head, 64), _listener)
+		: PhysicEntity(physics->CreateChain(0, 0, rick_head, 64), _listener)
 		, texture(_texture)
 	{
 
@@ -148,6 +149,7 @@ public:
 private:
 	Texture2D texture;
 };
+
 
 
 
@@ -233,11 +235,6 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_TWO))
 	{
 		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box));
-	}
-
-	if (IsKeyPressed(KEY_THREE))
-	{
-		entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), this, rick));
 	}
 
 	// Kicker control
