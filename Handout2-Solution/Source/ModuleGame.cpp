@@ -178,7 +178,10 @@ bool ModuleGame::Start()
 	kicker = LoadTexture("Assets/kicker.png"); 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1);
+	entities.emplace_back(new Circle(App->physics,600, 750, this, circle));
+
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
+	sensorPrimeraCurva = App->physics->CreateRectangleSensor(350, 180, 50, 10, -0.3);
 
 	//kicker
 	kickerForce = 0.0f;
@@ -199,12 +202,12 @@ bool ModuleGame::CleanUp()
 	return true;
 }
 
-
 // Update: draw background
 update_status ModuleGame::Update()
 {
 	if (inMainMenu)  // Si estamos en el menu principal
 	{
+			
 		DrawTexture(mainMenu, 0, 0, WHITE); //dibujar
 
 		//si se presiona espacio
@@ -218,32 +221,12 @@ update_status ModuleGame::Update()
 
 	DrawTexture(bg, 0, 0, WHITE);
 
-	if (IsKeyPressed(KEY_SPACE))
-	{
-		ray_on = !ray_on;
-		ray.x = GetMouseX();
-		ray.y = GetMouseY();
-	}
-
-	if (IsKeyPressed(KEY_ONE))
-	{
-		//entities.emplace_back(new Circle(App->physics, 593, 910, this, circle));
-		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle));
-
-	}
-
-	if (IsKeyPressed(KEY_TWO))
-	{
-		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box));
-	}
-
-	// Kicker control
 	if (IsKeyDown(KEY_DOWN)) { //si se presiona down, encojer
 		kickerChargeTime += GetFrameTime();
 		if (kickerChargeTime > maxChargeTime) kickerChargeTime = maxChargeTime;
 		kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce; //fuerza kicker depende tiempo de carga/maximo * fuerza max
 		isKickerShrinking = true; //kicker se encoje
-		isKickerGrowing = false; 
+		isKickerGrowing = false;
 	}
 	else if (IsKeyReleased(KEY_DOWN)) { // si se deja ir down:
 		if (isKickerShrinking) {
@@ -326,6 +309,35 @@ update_status ModuleGame::Update()
 		{
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
+	}
+
+	if (IsKeyPressed(KEY_F1))
+	{
+		debug = !debug;
+	}
+
+	if (!debug)
+	{
+		return UPDATE_CONTINUE;
+	}
+
+	if (IsKeyPressed(KEY_SPACE))
+	{
+		ray_on = !ray_on;
+		ray.x = GetMouseX();
+		ray.y = GetMouseY();
+	}
+
+	if (IsKeyPressed(KEY_ONE))
+	{
+		//entities.emplace_back(new Circle(App->physics, 593, 910, this, circle));
+		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle));
+
+	}
+
+	if (IsKeyPressed(KEY_TWO))
+	{
+		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box));
 	}
 
 	return UPDATE_CONTINUE;

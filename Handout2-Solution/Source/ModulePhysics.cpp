@@ -26,6 +26,8 @@ bool ModulePhysics::Start()
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
+	mostrarTexto = true;
+
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
@@ -195,10 +197,10 @@ bool ModulePhysics::Start()
 	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
 	CreateRectangle(  560,	 580,	   5,  740, b2_staticBody, 0);
 	//CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
-	CreateChain(0, 0, pinball1, 56);
-	CreateChain(0, 0, pinball2, 8);
-	CreateChain(0, 0, pinball3, 58);
-	CreateChain(0, 0, pinball4, 142);
+	PhysBody* cadenaPinball1 = CreateChain(0, 0, pinball1, 56);
+	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 8);
+	PhysBody* cadenaPinball3 = CreateChain(0, 0, pinball3, 58);
+	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 142);
 
 	//Obstacles
 	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
@@ -263,6 +265,7 @@ update_status ModulePhysics::PreUpdate()
 				}
 			}
 		}
+
 	}
 
 	return UPDATE_CONTINUE;
@@ -349,13 +352,14 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float rotation)
 {
 	PhysBody* pbody = new PhysBody();
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
 	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
 
 	b2Body* b = world->CreateBody(&body);
@@ -423,20 +427,32 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 
 update_status ModulePhysics::PostUpdate()
 {
+	
+	int displayCount = 3 - ballCount;
+	const char* texto = TextFormat("Bolas restantes: %d", displayCount);
+
+	if (mostrarTexto)	
+	{
+		DrawText(texto, SCREEN_WIDTH -300, 10, 30, WHITE);
+	}
+	
 	//Game Over Handling
-	if (ballCount == 3) {
+	if (ballCount == 4) {
 		gameOver = true;
 	}
 	if (gameOver) {
-		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, BLACK);
-		DrawText("Score:  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 40, 60, BLACK);
+		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
+		DrawText("Score:  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 40, 60, WHITE);
+		mostrarTexto = false;
 		// Espera a que se presione la tecla de espacio para reiniciar
 		if (IsKeyPressed(KEY_SPACE)) {
 
+			mostrarTexto = true;
 			gameOver = false;
 			ballCount = 0;
 		}
 	}
+
 	//Debug collisions show/hide
 	if (IsKeyPressed(KEY_F1))
 	{

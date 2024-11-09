@@ -19,10 +19,13 @@ public:
     bool CleanUp();
     void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+    ModulePhysics* physics;
+
 public:
     std::vector<PhysicEntity*> entities;
 
     PhysBody* sensor;
+    PhysBody* sensorPrimeraCurva;
     bool sensed;
 
     Texture2D mainMenu; // textura menu
@@ -51,5 +54,8 @@ public:
     float kickerScale = 1.0f; // escala de dibujo
     bool isKickerShrinking = false; //flag kicker encojiendose
     bool isKickerGrowing = false; //flag kicker creciendo
+
+private:
+    bool debug;
 
 };

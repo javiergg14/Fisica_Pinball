@@ -49,7 +49,7 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation);
 	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	int ballCount = 0; // num bolas restantes
 	bool gameOver = false; //flag game over
@@ -59,6 +59,7 @@ public:
 private:
 
 	bool debug;
+	bool mostrarTexto;
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
