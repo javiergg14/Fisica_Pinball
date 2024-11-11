@@ -170,6 +170,9 @@ bool ModuleGame::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	ptimer.ReadSec();
+	LOG("%f", ptimer.ReadSec());
+
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	mainMenu = LoadTexture("Assets/MainMenu.png");
@@ -351,15 +354,21 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA->listener == this) 
 	{
 		if (bodyB->IsSensor()) { 
-			currentScore += 10;
+			if (currentScore > 0)
+			{
+				currentScore -= 100;
+			}
 		}
 		else if (bodyB->IsSpecialObject())
 		{ 
-			currentScore += 50; 
+			currentScore *= 1.5; 
+			specialCounter++;
 		}
-		else 
+
+		if (specialCounter == 15)
 		{
-			currentScore += 20;
+			currentScore *= 10;
+			specialCounter = 0;
 		}
 	}
 }

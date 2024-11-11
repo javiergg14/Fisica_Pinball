@@ -207,13 +207,13 @@ bool ModulePhysics::Start()
 	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 146);
 
 	//Obstacles
-	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
-	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f);
-	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f);
-	CreateRombo(312, 358, 1.6f, 2.3f, b2_staticBody, 0);
-	CreateCircleRebote(475, 290, 24);
-	CreateCircleRebote(413, 335, 24);
-	CreateCircleRebote(393, 260, 24);
+	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f, true);
+	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f, true);
+	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f, true);
+	CreateRombo(312, 358, 1.6f, 2.3f, b2_staticBody, 0, true);
+	CreateCircleRebote(475, 290, 24, true);
+	CreateCircleRebote(413, 335, 24, true);
+	CreateCircleRebote(393, 260, 24, true);
 	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53);
 	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53);
 	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0);
@@ -303,9 +303,14 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius, bool isSpecial)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -326,12 +331,19 @@ PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius)
 	pbody->body = b;
 	pbody->width = pbody->height = radius;
 
+	
+
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation)
+PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
 
 	b2BodyDef body;
 	body.type = Type;
@@ -356,9 +368,14 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation)
+PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
 
 	b2BodyDef body;
 	body.type = Type;

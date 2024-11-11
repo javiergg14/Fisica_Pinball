@@ -33,15 +33,26 @@ public:
 		return body->GetFixtureList()->IsSensor();
 	}
 
-	bool IsSpecialObject() const 
+	bool IsSpecialObject() const
 	{
-		return false;
+		return isSpecial; // Devuelve el valor de la bandera
+	}
+
+	void SetAsSpecial()
+	{
+		isSpecial = true; // Marca el objeto como especial
+	}
+
+	void SetAsNormal()
+	{
+		isSpecial = false; // Marca el objeto como no especial
 	}
 
 public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	bool isSpecial;
 };
 
 // Module --------------------------------------
@@ -57,10 +68,10 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateCircleRebote(int x, int y, int radius);
+	PhysBody* CreateCircleRebote(int x, int y, int radius, bool isSpecial);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation);
-	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation);
-	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation);
+	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial);
+	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void ActualitationScore();

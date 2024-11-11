@@ -5,6 +5,7 @@
 #include "p2Point.h"
 #include "raylib.h"
 #include <vector>
+#include "Timer.h"
 
 class PhysBody;
 class PhysicEntity;
@@ -59,5 +60,6 @@ public:
 
 private:
     bool debug;
-
+    int specialCounter = 0;
+    Timer ptimer;
 };
