@@ -531,10 +531,11 @@ update_status ModulePhysics::PostUpdate()
 
 		// Espera a que se presione la tecla de espacio para reiniciar
 		if (IsKeyPressed(KEY_SPACE)) {
-
 			mostrarTexto = true;
 			gameOver = false;
 			ballCount = 0;
+			previousScore = currentScore;
+			currentScore = 0;
 		}
 	}
 
@@ -671,9 +672,7 @@ bool ModulePhysics::CleanUp()
 }
 
 void ModulePhysics::ActualitationScore() 
-{
-	previousScore = currentScore;
-	
+{	
 	if (currentScore > highScore)
 	{
 		highScore = currentScore;
