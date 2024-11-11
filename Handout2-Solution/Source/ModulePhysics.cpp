@@ -9,6 +9,7 @@
 
 int highScore = 0;
 int previousScore = 0;
+float scoreTimer = 0;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -247,6 +248,8 @@ update_status ModulePhysics::PreUpdate()
 			PhysBody* pb1 = (PhysBody*)data1.pointer;
 			PhysBody* pb2 = (PhysBody*)data2.pointer;
 
+			scoreTimer = 0;
+
 			// Verificar si pb2 es la pelota
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
 				
@@ -294,7 +297,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.3f;
+	fixture.density = 0.2f;
 
 	b->CreateFixture(&fixture);
 

@@ -43,4 +43,5 @@ enum update_status
 extern int currentScore;
 extern int highScore;
 extern int previousScore;
+extern float scoreTimer;
 

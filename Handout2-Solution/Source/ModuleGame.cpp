@@ -170,8 +170,7 @@ bool ModuleGame::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	ptimer.ReadSec();
-	LOG("%f", ptimer.ReadSec());
+	
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -245,6 +244,10 @@ update_status ModuleGame::Update()
 			}
 			kickerChargeTime = 0.0f; // Resetear el tiempo de carga
 		}
+		if (scoreTimer == 0)	
+		{
+			scoreTimer = ptimer.ReadSec();
+		}
 	}
 	// encojer kicker
 	if (isKickerShrinking) {
@@ -267,6 +270,9 @@ update_status ModuleGame::Update()
 	float kickerX = 575;
 	float kickerY = 804 + kicker.height * (1.2f - kickerScale);
 	kickerCollider->body->SetTransform(b2Vec2(kickerX / PIXELS_PER_METER, kickerY / PIXELS_PER_METER), kickerCollider->body->GetAngle());
+
+	//Score
+	UpdateScoreTimer();
 
 	// Dibujar el kicker
 	DrawTexturePro(kicker, Rectangle{ 0, 0, (float)kicker.width, (float)kicker.height }, Rectangle{ 575, 800 + kicker.height * (1.2f - kickerScale),
@@ -297,7 +303,6 @@ update_status ModuleGame::Update()
 			}
 		}
 	}
-
 
 	// ray -----------------
 	if (ray_on == true)
@@ -364,11 +369,19 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			currentScore *= 1.5; 
 			specialCounter++;
 		}
-
 		if (specialCounter == 15)
 		{
-			currentScore *= 10;
+			currentScore *= 2;
 			specialCounter = 0;
 		}
+	}
+}
+
+void ModuleGame::UpdateScoreTimer()
+{
+	if (scoreTimer + 1 <= ptimer.ReadSec() && scoreTimer != 0)
+	{
+		currentScore += 10;
+		scoreTimer = ptimer.ReadSec();
 	}
 }
