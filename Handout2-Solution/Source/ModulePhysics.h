@@ -57,8 +57,10 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateCircleRebote(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation);
 	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation);
+	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void ActualitationScore();

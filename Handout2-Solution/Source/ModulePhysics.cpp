@@ -186,12 +186,12 @@ bool ModulePhysics::Start()
 
 	
 	//Limits
-	CreateRectangle(145,      865,     225, 20, b2_staticBody, 0.55);
+	CreateRectangle(145,865, 225, 20, b2_staticBody, 0.55);
 	CreateRectangle(50, 740, 50, 10, b2_staticBody, 0.6);
 	CreateRectangle(68, 780, 10, 60, b2_staticBody, 0);
 	CreateRectangle(243, 933, 10, 30, b2_staticBody, -0.05);
 
-	CreateRectangle(470, 865, 210, 15, b2_staticBody, -0.55);
+	CreateRectangle(465, 865, 200, 15, b2_staticBody, -0.55);
 	CreateRectangle(380, 933, 10, 30, b2_staticBody, 0.05);
 
 	CreateRectangle(68, 540, 5, 320, b2_staticBody, 0);
@@ -210,6 +210,10 @@ bool ModulePhysics::Start()
 	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
 	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f);
 	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f);
+	CreateRombo(312, 358, 1.6f, 2.3f, b2_staticBody, 0);
+	CreateCircleRebote(475, 290, 24);
+	CreateCircleRebote(413, 335, 24);
+	CreateCircleRebote(393, 260, 24);
 	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53);
 	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53);
 	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0);
@@ -299,6 +303,31 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	return pbody;
 }
+PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius)
+{
+	PhysBody* pbody = new PhysBody();
+
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 0.3f;
+	fixture.restitution = 1.5f;
+
+	b->CreateFixture(&fixture);
+
+	pbody->body = b;
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
 
 PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation)
 {
@@ -327,6 +356,44 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 
 	return pbody;
 }
+PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation)
+{
+	PhysBody* pbody = new PhysBody();
+
+	b2BodyDef body;
+	body.type = Type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+
+	b2Body* b = world->CreateBody(&body);
+
+	// Definir un rombo como un cuadrado rotado
+	b2PolygonShape rombo;
+	b2Vec2 vertices[4];
+
+	// Vértices del rombo (a partir de un cuadrado con width y height)
+	vertices[0].Set(0.0f, height * 0.5f);  // Vértice superior
+	vertices[1].Set(width * 0.5f, 0.0f);   // Vértice derecho
+	vertices[2].Set(0.0f, -height * 0.5f); // Vértice inferior
+	vertices[3].Set(-width * 0.5f, 0.0f);  // Vértice izquierdo
+
+	rombo.Set(vertices, 4);
+
+	b2FixtureDef fixture;
+	fixture.shape = &rombo;
+	fixture.density = 1.0f;
+	fixture.restitution = 1.5f;  // Rebote
+
+	b->CreateFixture(&fixture);
+
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
+	return pbody;
+}
+
 
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation)
 {
