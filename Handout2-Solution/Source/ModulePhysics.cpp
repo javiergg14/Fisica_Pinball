@@ -7,6 +7,9 @@
 
 #include <math.h>
 
+int highScore = 0;
+int previousScore = 0;
+
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	world = NULL;
@@ -104,7 +107,7 @@ bool ModulePhysics::Start()
 	70, 690,
 	70, 697
 	};
-	int pinball4[142] = {
+	int pinball4[146] = {
 	551, 795,
 	551, 607,
 	547, 589,
@@ -141,42 +144,45 @@ bool ModulePhysics::Start()
 	397, 172,
 	380, 165,
 	373, 171,
-	356, 181,
-	336, 185,
-	322, 190,
-	305, 181,
-	288, 179,
-	275, 177,
-	262, 187,
-	254, 200,
-	244, 217,
-	242, 233,
-	232, 243,
-	215, 248,
-	203, 227,
+	373, 182,
+	355, 190,
+	337, 194,
+	319, 176,
+	300, 167,
+	278, 160,
+	262, 168,
+	252, 191,
+	240, 212,
+	232, 229,
+	233, 246,
+	215, 254,
+	202, 226,
 	197, 201,
-	200, 177,
-	209, 148,
-	231, 118,
-	261, 94,
+	199, 167,
+	212, 138,
+	227, 117,
+	250, 99,
 	280, 86,
-	319, 84,
-	346, 85,
+	312, 82,
+	340, 82,
 	360, 82,
-	387, 85,
-	410, 89,
-	437, 96,
-	458, 101,
-	484, 113,
-	505, 118,
-	524, 136,
+	387, 82,
+	409, 86,
+	437, 92,
+	457, 99,
+	482, 108,
+	504, 122,
+	525, 139,
 	536, 155,
 	548, 181,
 	554, 210,
 	561, 254,
-	559, 281,
-	559, 942
+	561, 339,
+	560, 541,
+	560, 795,
+	560, 945
 	};
+
 
 	
 	//Limits
@@ -195,12 +201,10 @@ bool ModulePhysics::Start()
 	CreateRectangle(  8,	 y / 2,	   50,  y, b2_staticBody, 0);
 
 	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
-	CreateRectangle(  560,	 580,	   5,  740, b2_staticBody, 0);
-	//CreateRectangle(  580,	 940,	   50,  10, b2_staticBody, 0);
 	PhysBody* cadenaPinball1 = CreateChain(0, 0, pinball1, 56);
 	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 8);
 	PhysBody* cadenaPinball3 = CreateChain(0, 0, pinball3, 58);
-	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 142);
+	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 146);
 
 	//Obstacles
 	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f);
@@ -439,6 +443,7 @@ update_status ModulePhysics::PostUpdate()
 	if (mostrarTexto)	
 	{
 		DrawText(texto, SCREEN_WIDTH -300, 10, 30, WHITE);
+		DrawText(TextFormat("Score: %d", currentScore), 20, 10, 30, WHITE);
 	}
 	
 	//Game Over Handling
@@ -447,13 +452,13 @@ update_status ModulePhysics::PostUpdate()
 	}
 	if (gameOver) {
 
-		ActualitationScore();
-
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
 
 		DrawText(TextFormat("Score: %d", currentScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 60, 40, WHITE);
 		DrawText(TextFormat("High Score: %d", highScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 120,40, WHITE);
 		DrawText(TextFormat("Previous Score: %d", previousScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 180, 40, WHITE);
+
+		ActualitationScore();
 
 		mostrarTexto = false;
 
@@ -465,6 +470,8 @@ update_status ModulePhysics::PostUpdate()
 			ballCount = 0;
 		}
 	}
+
+	
 
 	//Debug collisions show/hide
 	if (IsKeyPressed(KEY_F1))
@@ -591,18 +598,19 @@ bool ModulePhysics::CleanUp()
 	// Delete the whole physics world!
 	delete world;
 
+
+
 	return true;
 }
 
 void ModulePhysics::ActualitationScore() 
 {
+	previousScore = currentScore;
+	
 	if (currentScore > highScore)
 	{
 		highScore = currentScore;
 	}
-
-	previousScore = currentScore;
-	currentScore = 0;
 }
 
 

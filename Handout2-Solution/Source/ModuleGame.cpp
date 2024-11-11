@@ -5,6 +5,8 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
+int currentScore = 0;
+
 class PhysicEntity
 {
 protected:
@@ -346,7 +348,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	App->audio->PlayFx(bonus_fx);
 
-	/*if (bodyA->listener == this) 
+	if (bodyA->listener == this) 
 	{
 		if (bodyB->IsSensor()) { 
 			currentScore += 10;
@@ -359,5 +361,5 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			currentScore += 20;
 		}
-	}*/
+	}
 }

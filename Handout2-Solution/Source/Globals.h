@@ -38,4 +38,9 @@ enum update_status
 #define WIN_BORDERLESS		false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC				true
-#define TITLE			"PINBALL"
+#define TITLE			"PINBALL HEINEKEN"
+
+extern int currentScore;
+extern int highScore;
+extern int previousScore;
+

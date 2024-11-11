@@ -67,10 +67,6 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-	int currentScore = 0;
-	int highScore = 0;
-	int previousScore = 0;
-
 private:
 
 	bool debug;
