@@ -91,14 +91,13 @@ public:
 
 private:
 	Texture2D texture;
-
 };
 
-class Rick : public PhysicEntity
+class Flipper : public PhysicEntity
 {
 public:
 	// Pivot 0, 0
-	static constexpr int rick_head[64] = {
+	static constexpr int flipper_chain[64] = {
 			14, 36,
 			42, 40,
 			40, 0,
@@ -134,11 +133,10 @@ public:
 	};
 
 
-	Rick(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(0, 0, rick_head, 64), _listener)
+	Flipper(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
+		: PhysicEntity(physics->CreateChain(_x, _y, flipper_chain, 64), _listener)
 		, texture(_texture)
 	{
-
 	}
 
 	void Update() override
@@ -146,6 +144,11 @@ public:
 		int x, y;
 		body->GetPhysicPosition(x, y);
 		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+	}
+
+	void ApplyTorquee(float torque)
+	{
+		body->body->ApplyTorque(torque, true);
 	}
 
 private:
@@ -177,14 +180,20 @@ bool ModuleGame::Start()
 	mainMenu = LoadTexture("Assets/MainMenu.png");
 	circle = LoadTexture("Assets/ball.png");
 	box = LoadTexture("Assets/crate.png");
-	rick = LoadTexture("Assets/rick_head.png");
+	flipperR = LoadTexture("Assets/flipperRight.png");
+	flipperL = LoadTexture("Assets/flipperLeft.png");
 	bg = LoadTexture("Assets/Background.png");
 	kicker = LoadTexture("Assets/kicker.png"); 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
-	entities.emplace_back(new Circle(App->physics,600, 750, this, circle));
+	entities.emplace_back(new Circle(App->physics, 600, 750, this, circle));
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
+
+	//flippers
+	flipperRight = new Flipper(App->physics, 342, 823, this, flipperR);
+	flipperLeft = new Flipper(App->physics, 210, 823, this, flipperL);
+
 
 	//kicker
 	kickerForce = 0.0f;
@@ -217,6 +226,15 @@ update_status ModuleGame::Update()
 			inMainMenu = false; //salir del menu
 		}
 		return UPDATE_CONTINUE;
+	}
+
+	if (IsKeyDown(KEY_A))
+	{
+		// Calcular el torque que corresponde a la fuerza aplicada en el punto
+		float torque = 10;  // Suponiendo que la fuerza se aplica a lo largo del eje X
+
+		// Aplicar el torque al flipper
+		//flipperLeft->ApplyTorque(torque);
 	}
 
 
@@ -286,6 +304,7 @@ update_status ModuleGame::Update()
 	vec2i mouse;
 	mouse.x = GetMouseX();
 	mouse.y = GetMouseY();
+	printf("\n x:%d y:%d", mouse.x, mouse.y);
 	int ray_hit = ray.DistanceTo(mouse);
 
 	vec2f normal(0.0f, 0.0f);
@@ -305,6 +324,11 @@ update_status ModuleGame::Update()
 			}
 		}
 	}
+
+	// Draw flippers
+	flipperRight->Update();
+	flipperLeft->Update();
+
 
 	// ray -----------------
 	if (ray_on == true)

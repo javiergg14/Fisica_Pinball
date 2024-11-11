@@ -32,10 +32,14 @@ public:
     PhysBody* sensorPrimeraCurva;
     bool sensed;
 
+    PhysicEntity* flipperRight;
+    PhysicEntity* flipperLeft;
+
     Texture2D mainMenu; // textura menu
     Texture2D circle;
     Texture2D box;
-    Texture2D rick;
+    Texture2D flipperR;
+    Texture2D flipperL;
     Texture2D bg;
     Texture2D kicker; //textura kicker
 
