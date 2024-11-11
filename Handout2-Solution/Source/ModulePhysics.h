@@ -105,7 +105,6 @@ public:
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void ActualitationScore();
 	int ballCount = 0; // num bolas restantes
-	bool gameOver = false; //flag game over
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

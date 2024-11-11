@@ -222,30 +222,33 @@ update_status ModuleGame::Update()
 
 	DrawTexture(bg, 0, 0, WHITE);
 
-	if (IsKeyDown(KEY_DOWN)) { //si se presiona down, encojer
-		kickerChargeTime += GetFrameTime();
-		if (kickerChargeTime > maxChargeTime) kickerChargeTime = maxChargeTime;
-		kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce; //fuerza kicker depende tiempo de carga/maximo * fuerza max
-		isKickerShrinking = true; //kicker se encoje
-		isKickerGrowing = false;
-	}
-	else if (IsKeyReleased(KEY_DOWN)) { // si se deja ir down:
-		if (isKickerShrinking) {
-			isKickerGrowing = true; //kicker crece a su estado normal
-			isKickerShrinking = false;
-			// Aplicar impulso a todos los círculos cuando se suelta la tecla
-			for (PhysicEntity* entity : entities) {
-				Circle* circleEntity = dynamic_cast<Circle*>(entity);
-				if (circleEntity) {
-					vec2<float> impulse(0, -kickerForce); // Impulso hacia arriba
-					circleEntity->GetBody()->body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
-				}
-			}
-			kickerChargeTime = 0.0f; // Resetear el tiempo de carga
+	if (!gameOver)
+	{
+		if (IsKeyDown(KEY_DOWN)) { //si se presiona down, encojer
+			kickerChargeTime += GetFrameTime();
+			if (kickerChargeTime > maxChargeTime) kickerChargeTime = maxChargeTime;
+			kickerForce = (kickerChargeTime / maxChargeTime) * maxKickerForce; //fuerza kicker depende tiempo de carga/maximo * fuerza max
+			isKickerShrinking = true; //kicker se encoje
+			isKickerGrowing = false;
 		}
-		if (scoreTimer == 0)	
-		{
-			scoreTimer = ptimer.ReadSec();
+		else if (IsKeyReleased(KEY_DOWN)) { // si se deja ir down:
+			if (isKickerShrinking) {
+				isKickerGrowing = true; //kicker crece a su estado normal
+				isKickerShrinking = false;
+				// Aplicar impulso a todos los círculos cuando se suelta la tecla
+				for (PhysicEntity* entity : entities) {
+					Circle* circleEntity = dynamic_cast<Circle*>(entity);
+					if (circleEntity) {
+						vec2<float> impulse(0, -kickerForce); // Impulso hacia arriba
+						circleEntity->GetBody()->body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
+					}
+				}
+				kickerChargeTime = 0.0f; // Resetear el tiempo de carga
+			}
+			if (scoreTimer == 0)
+			{
+				scoreTimer = ptimer.ReadSec();
+			}
 		}
 	}
 	// encojer kicker

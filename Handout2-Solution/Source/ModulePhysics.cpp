@@ -11,6 +11,7 @@ int highScore = 0;
 int previousScore = 0;
 float scoreTimer = 0;
 float ballTimer = 0;
+bool gameOver = false;	
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

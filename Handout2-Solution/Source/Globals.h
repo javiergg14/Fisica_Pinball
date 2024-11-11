@@ -45,4 +45,5 @@ extern int highScore;
 extern int previousScore;
 extern float scoreTimer;
 extern float ballTimer;
+extern bool gameOver; //flag game over
 
