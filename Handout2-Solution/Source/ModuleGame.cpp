@@ -199,6 +199,15 @@ bool ModuleGame::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	if (currentScore > highScore)
+	{
+		highScore = currentScore;
+	}
+
+	previousScore = currentScore;
+	currentScore = 0;
+
+
 	return true;
 }
 
@@ -214,6 +223,11 @@ update_status ModuleGame::Update()
 		if (IsKeyPressed(KEY_SPACE)) {
 			inMainMenu = false; //salir del menu
 		}
+
+		DrawText(TextFormat("Puntuación: %d", currentScore), 10, 10, 20, WHITE);
+		DrawText(TextFormat("Puntuación más alta: %d", highScore), 10, 40, 20, WHITE);
+		DrawText(TextFormat("Puntuación anterior: %d", previousScore), 10, 70, 20, WHITE);
+
 
 		return UPDATE_CONTINUE;
 	}
@@ -348,4 +362,18 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	App->audio->PlayFx(bonus_fx);
 
+	if (bodyA->listener == this) 
+	{
+		if (bodyB->IsSensor()) { 
+			currentScore += 10;
+		}
+		else if (bodyB->IsSpecialObject())
+		{ 
+			currentScore += 50; 
+		}
+		else 
+		{
+			currentScore += 20;
+		}
+	}
 }

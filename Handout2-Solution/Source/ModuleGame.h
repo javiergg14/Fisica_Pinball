@@ -19,6 +19,10 @@ public:
     bool CleanUp();
     void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+    int currentScore = 0;
+    int highScore = 0;
+    int previousScore = 0;
+
     ModulePhysics* physics;
 
 public:
