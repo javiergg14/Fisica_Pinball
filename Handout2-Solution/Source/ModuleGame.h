@@ -63,4 +63,5 @@ private:
     bool debug;
     int specialCounter = 0;
     Timer ptimer;
+    int countBoton = 0;
 };

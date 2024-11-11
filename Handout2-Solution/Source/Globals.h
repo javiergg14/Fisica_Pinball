@@ -44,4 +44,5 @@ extern int currentScore;
 extern int highScore;
 extern int previousScore;
 extern float scoreTimer;
+extern float ballTimer;
 

@@ -10,6 +10,7 @@
 int highScore = 0;
 int previousScore = 0;
 float scoreTimer = 0;
+float ballTimer = 0;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -184,8 +185,6 @@ bool ModulePhysics::Start()
 	560, 945
 	};
 
-
-	
 	//Limits
 	CreateRectangle(145,865, 225, 20, b2_staticBody, 0.55);
 	CreateRectangle(50, 740, 50, 10, b2_staticBody, 0.6);
@@ -225,8 +224,10 @@ bool ModulePhysics::Start()
 	CreateRectangle(112, 710, 5, 145, b2_staticBody, 0);
 	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0);
 
-
-
+	Boton(406, 190, 20, 10, b2_staticBody, 0.25, true);
+	Boton(438, 200, 20, 10, b2_staticBody, 0.30, true);
+	Boton(469, 211, 20, 10, b2_staticBody, 0.40, true);
+	Boton(495, 230, 20, 10, b2_staticBody, 0.55, true);
 
 	return true;
 }
@@ -236,12 +237,14 @@ bool ModulePhysics::Start()
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
+
 	
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
 		
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
+			ballTimer = 0;
 			b2BodyUserData data1 = c->GetFixtureA()->GetBody()->GetUserData();
 			b2BodyUserData data2 = c->GetFixtureB()->GetBody()->GetUserData();
 
@@ -252,27 +255,12 @@ update_status ModulePhysics::PreUpdate()
 
 			// Verificar si pb2 es la pelota
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
-				
-				float timer = 0.0f;
-				bool waiting = true;
-
-				//while (!WindowShouldClose()) {
-				//	// Actualizar el temporizador
-				//	if (waiting) {
-				//		timer += GetFrameTime(); // Tiempo desde el último frame
-				//		if (timer >= 2.0f) { // 2 segundos
-				//			waiting = false; // Terminar la espera
-				//		}
-				//	}
-				//}
-
-				// Cambiar la posición de la pelota a un nuevo lugar
 				ballCount++; //contador
-				if(ballCount <=2) {
-				pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
-				// Reiniciar la velocidad para evitar aceleración infinita
-				pb2->body->SetLinearVelocity(b2Vec2(0, 0));
-				pb2->body->SetAngularVelocity(0);
+				if (ballCount <= 3) {
+					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
+					// Reiniciar la velocidad para evitar aceleración infinita
+					pb2->body->SetLinearVelocity(b2Vec2(0, 0));
+					pb2->body->SetAngularVelocity(0);
 				}
 			}
 		}
@@ -368,6 +356,41 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	pbody->body = b;
 	pbody->width = (int)(width * 0.5f);
 	pbody->height = (int)(height * 0.5f);
+
+	return pbody;
+}
+PhysBody* ModulePhysics::Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool boton)
+{
+	PhysBody* pbody = new PhysBody();
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
+
+	pbody->Desactivte();
+
+	b2BodyDef body;
+	body.type = Type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.restitution = 0.7f;
+
+	b->CreateFixture(&fixture);
+
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
 
 	return pbody;
 }

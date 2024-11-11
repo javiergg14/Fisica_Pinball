@@ -185,7 +185,6 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Circle(App->physics,600, 750, this, circle));
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
-	sensorPrimeraCurva = App->physics->CreateRectangleSensor(350, 180, 50, 10, -0.3);
 
 	//kicker
 	kickerForce = 0.0f;
@@ -369,11 +368,32 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			currentScore *= 1.5; 
 			specialCounter++;
 		}
+		else if (bodyB->IsBoton())
+		{
+			if (!bodyB->IsActivate())
+			{
+				countBoton += 1;
+				bodyB->SetAsActive();
+			}
+			else
+			{
+				bodyB->Desactivte();
+			}
+		}
+		if (countBoton == 4)
+		{
+			currentScore *= 3;
+			countBoton = 0;
+		}
 		if (specialCounter == 15)
 		{
 			currentScore *= 2;
 			specialCounter = 0;
 		}
+	}
+	if (currentScore < 0)
+	{
+		currentScore = 0;
 	}
 }
 

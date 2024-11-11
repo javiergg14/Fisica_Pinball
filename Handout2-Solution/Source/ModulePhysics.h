@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "Timer.h"
 
 #include "box2d\box2d.h"
 
@@ -38,14 +39,39 @@ public:
 		return isSpecial; // Devuelve el valor de la bandera
 	}
 
+	bool IsBoton() const
+	{
+		return isBoton; // Devuelve el valor de la bandera
+	}
+
+	bool IsActivate() const
+	{
+		return active; // Devuelve el valor de la bandera
+	}
+
 	void SetAsSpecial()
 	{
 		isSpecial = true; // Marca el objeto como especial
+	}
+	void SetAsBoton()
+	{
+		isBoton = true; // Marca el objeto como especial
 	}
 
 	void SetAsNormal()
 	{
 		isSpecial = false; // Marca el objeto como no especial
+		isBoton = false;
+	}
+
+	void SetAsActive()
+	{
+		active = true;
+	}
+
+	void Desactivte()
+	{
+		active = false;
 	}
 
 public:
@@ -53,6 +79,8 @@ public:
 	b2Body* body;
 	Module* listener;
 	bool isSpecial;
+	bool isBoton;
+	bool active;
 };
 
 // Module --------------------------------------
@@ -71,6 +99,7 @@ public:
 	PhysBody* CreateCircleRebote(int x, int y, int radius, bool isSpecial);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation);
 	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial);
+	PhysBody* Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool boton);
 	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
@@ -87,4 +116,5 @@ private:
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
+	Timer rtimer;
 };
