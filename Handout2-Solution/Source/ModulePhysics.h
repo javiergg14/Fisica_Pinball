@@ -61,10 +61,15 @@ public:
 	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
+	void ActualitationScore();
 	int ballCount = 0; // num bolas restantes
 	bool gameOver = false; //flag game over
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+
+	int currentScore = 0;
+	int highScore = 0;
+	int previousScore = 0;
 
 private:
 

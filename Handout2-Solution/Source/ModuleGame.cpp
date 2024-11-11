@@ -38,7 +38,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 10), _listener), texture(_texture)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12), _listener), texture(_texture)
 	{
 	}
 
@@ -171,10 +171,10 @@ bool ModuleGame::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	mainMenu = LoadTexture("Assets/MainMenu.png");
-	circle = LoadTexture("Assets/wheel.png");
+	circle = LoadTexture("Assets/ball.png");
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
-	bg = LoadTexture("Assets/pinball.png");
+	bg = LoadTexture("Assets/Background.png");
 	kicker = LoadTexture("Assets/kicker.png"); 
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
@@ -198,16 +198,6 @@ bool ModuleGame::Start()
 bool ModuleGame::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
-	if (currentScore > highScore)
-	{
-		highScore = currentScore;
-	}
-
-	previousScore = currentScore;
-	currentScore = 0;
-
-
 	return true;
 }
 
@@ -223,12 +213,6 @@ update_status ModuleGame::Update()
 		if (IsKeyPressed(KEY_SPACE)) {
 			inMainMenu = false; //salir del menu
 		}
-
-		DrawText(TextFormat("Puntuación: %d", currentScore), 10, 10, 20, WHITE);
-		DrawText(TextFormat("Puntuación más alta: %d", highScore), 10, 40, 20, WHITE);
-		DrawText(TextFormat("Puntuación anterior: %d", previousScore), 10, 70, 20, WHITE);
-
-
 		return UPDATE_CONTINUE;
 	}
 
@@ -362,7 +346,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	App->audio->PlayFx(bonus_fx);
 
-	if (bodyA->listener == this) 
+	/*if (bodyA->listener == this) 
 	{
 		if (bodyB->IsSensor()) { 
 			currentScore += 10;
@@ -375,5 +359,5 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			currentScore += 20;
 		}
-	}
+	}*/
 }

@@ -313,7 +313,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 2.0f; 
+	fixture.restitution = 1.5f; 
 
 	b->CreateFixture(&fixture);
 
@@ -431,19 +431,32 @@ update_status ModulePhysics::PostUpdate()
 	int displayCount = 3 - ballCount;
 	const char* texto = TextFormat("Bolas restantes: %d", displayCount);
 
+	if (IsKeyPressed(KEY_F2))
+	{
+		gameOver = true;
+	}
+
 	if (mostrarTexto)	
 	{
 		DrawText(texto, SCREEN_WIDTH -300, 10, 30, WHITE);
 	}
 	
 	//Game Over Handling
-	if (ballCount == 4) {
+	if (ballCount == 3) {
 		gameOver = true;
 	}
 	if (gameOver) {
+
+		ActualitationScore();
+
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
-		DrawText("Score:  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 40, 60, WHITE);
+
+		DrawText(TextFormat("Score: %d", currentScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 60, 40, WHITE);
+		DrawText(TextFormat("High Score: %d", highScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 120,40, WHITE);
+		DrawText(TextFormat("Previous Score: %d", previousScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 180, 40, WHITE);
+
 		mostrarTexto = false;
+
 		// Espera a que se presione la tecla de espacio para reiniciar
 		if (IsKeyPressed(KEY_SPACE)) {
 
@@ -580,6 +593,19 @@ bool ModulePhysics::CleanUp()
 
 	return true;
 }
+
+void ModulePhysics::ActualitationScore() 
+{
+	if (currentScore > highScore)
+	{
+		highScore = currentScore;
+	}
+
+	previousScore = currentScore;
+	currentScore = 0;
+}
+
+
 
 void PhysBody::GetPhysicPosition(int& x, int& y) const
 {
