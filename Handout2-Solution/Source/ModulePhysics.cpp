@@ -239,8 +239,8 @@ bool ModulePhysics::Start()
 	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0, false, false);
 	CreateRectangle(470, 695, 10, 90, b2_staticBody, 0, false, false);
 
-	CreateRectangle(160, 800, 115, 23, b2_staticBody, 0.53, false, false);
-	CreateRectangle(463, 800, 115, 23, b2_staticBody, -0.53, false, false);
+	CreateRectangle(170, 810, 125, 23, b2_staticBody, 0.53, false, false);
+	CreateRectangle(453, 810, 125, 23, b2_staticBody, -0.53, false, false);
 	CreateRectangle(112, 710, 5, 145, b2_staticBody, 0, false, false);
 	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0, false, false);
 
