@@ -162,8 +162,8 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
 
 	//flippers
-	flipperRight = new Flipper(App->physics, 373, 834, 0, this, flipperR);
-	flipperLeft = new Flipper(App->physics, 250, 834, 0, this, flipperL);
+	flipperRight = new Flipper(App->physics, 375, 848, 0, this, flipperR);
+	flipperLeft = new Flipper(App->physics, 250, 848, 0, this, flipperL);
 
 
 	//kicker
@@ -229,7 +229,7 @@ update_status ModuleGame::Update()
 	}
 	else
 	{
-		if (currentAngleLeft < 0.0f)
+		if (currentAngleLeft < 0.4f)
 		{
 			flipperLeft->GetBody()->body->SetAngularVelocity(RESTORE_SPEED);
 		}
@@ -253,7 +253,7 @@ update_status ModuleGame::Update()
 	}
 	else
 	{
-		if (currentAngleRight > 0.0f)
+		if (currentAngleRight > -0.4f)
 		{
 			flipperRight->GetBody()->body->SetAngularVelocity(-RESTORE_SPEED);
 		}
