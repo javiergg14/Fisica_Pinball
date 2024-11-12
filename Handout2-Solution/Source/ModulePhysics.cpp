@@ -14,7 +14,6 @@ float ballTimer = 0;
 bool gameOver = false;	
 bool mostrarTexto = true;
 bool muerteLuces = true;
-int ballCount = 0;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -206,48 +205,48 @@ bool ModulePhysics::Start()
 	};
 
 	//Limits
-	CreateRectangle(145,865, 225, 20, b2_staticBody, 0.55);
-	CreateRectangle(50, 740, 50, 10, b2_staticBody, 0.6);
-	CreateRectangle(68, 780, 10, 60, b2_staticBody, 0);
-	CreateRectangle(243, 933, 10, 30, b2_staticBody, -0.05);
+	CreateRectangle(145,865, 225, 20, b2_staticBody, 0.55, false, false);
+	CreateRectangle(50, 740, 50, 10, b2_staticBody, 0.6, false, false);
+	CreateRectangle(68, 780, 10, 60, b2_staticBody, 0, false, false);
+	CreateRectangle(243, 933, 10, 30, b2_staticBody, -0.05, false, false);
 
-	CreateRectangle(465, 865, 200, 15, b2_staticBody, -0.55);
-	CreateRectangle(380, 933, 10, 30, b2_staticBody, 0.05);
+	CreateRectangle(465, 865, 200, 15, b2_staticBody, -0.55, false, false);
+	CreateRectangle(380, 933, 10, 30, b2_staticBody, 0.05, false, false);
 
-	CreateRectangle(68, 540, 5, 320, b2_staticBody, 0);
+	CreateRectangle(68, 540, 5, 320, b2_staticBody, 0, false, false);
 
-	CreateRectangle(x/2,0,	x, 20, b2_staticBody, 0);
+	CreateRectangle(x/2,0,	x, 20, b2_staticBody, 0, false, false);
 
-	CreateRectangle(  8,	 y / 2,	   50,  y, b2_staticBody, 0);
+	CreateRectangle(  8,	 y / 2,	   50,  y, b2_staticBody, 0, false, false);
 
-	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
-	PhysBody* cadenaPinball1 = CreateChain(0, 0, pinball1, 56);
-	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 30);
-	PhysBody* cadenaPinball3 = CreateChain(0, 0, pinball3, 58);
-	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 146);
+	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0, false, false);
+	PhysBody* cadenaPinball1 = CreateChain(0, 0, pinball1, 56, false, false);
+	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 30, false, false);
+	PhysBody* cadenaPinball3 = CreateChain(0, 0, pinball3, 58, false, false);
+	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 146, false, false);
 
 	//Obstacles
-	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f, true);
-	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f, true);
-	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f, true);
-	CreateRombo(312, 358, 1.6f, 2.3f, b2_staticBody, 0, true);
-	CreateCircleRebote(475, 290, 24, true);
-	CreateCircleRebote(413, 335, 24, true);
-	CreateCircleRebote(393, 260, 24, true);
-	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53);
-	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53);
-	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0);
-	CreateRectangle(470, 695, 10, 90, b2_staticBody, 0);
+	CreateRectangleRebote(432, 708, 150, 10, b2_staticBody, -1.05f, true, false);
+	CreateRectangleRebote(191, 708, 150, 10, b2_staticBody,  1.05f, true, false);
+	CreateRectangleRebote(290, 225, 100, 20, b2_staticBody, -0.5f, true, false);
+	CreateRombo(312, 358, 1.6f, 2.3f, b2_staticBody, 0, true, false);
+	CreateCircleRebote(475, 290, 24, true, false);
+	CreateCircleRebote(413, 335, 24, true, false);
+	CreateCircleRebote(393, 260, 24, true, false);
+	CreateRectangle(187, 757, 85, 10, b2_staticBody, 0.53, false, false);
+	CreateRectangle(436, 757, 85, 10, b2_staticBody, -0.53, false, false);
+	CreateRectangle(153, 695, 10, 90, b2_staticBody, 0, false, false);
+	CreateRectangle(470, 695, 10, 90, b2_staticBody, 0, false, false);
 
-	CreateRectangle(160, 800, 115, 23, b2_staticBody, 0.53);
-	CreateRectangle(463, 800, 115, 23, b2_staticBody, -0.53);
-	CreateRectangle(112, 710, 5, 145, b2_staticBody, 0);
-	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0);
+	CreateRectangle(160, 800, 115, 23, b2_staticBody, 0.53, false, false);
+	CreateRectangle(463, 800, 115, 23, b2_staticBody, -0.53, false, false);
+	CreateRectangle(112, 710, 5, 145, b2_staticBody, 0, false, false);
+	CreateRectangle(514, 710, 5, 145, b2_staticBody, 0, false, false);
 
-	Boton(406, 190, 20, 10, b2_staticBody, 0.25, true);
-	Boton(438, 200, 20, 10, b2_staticBody, 0.30, true);
-	Boton(469, 211, 20, 10, b2_staticBody, 0.40, true);
-	Boton(495, 230, 20, 10, b2_staticBody, 0.55, true);
+	Boton(406, 190, 20, 10, b2_staticBody, 0.25, false, true);
+	Boton(438, 200, 20, 10, b2_staticBody, 0.30, false, true);
+	Boton(469, 211, 20, 10, b2_staticBody, 0.40, false, true);
+	Boton(495, 230, 20, 10, b2_staticBody, 0.55, false, true);
 
 	return true;
 }
@@ -295,9 +294,19 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
 
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -310,22 +319,28 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.5f;
+	fixture.density = 0.7f;
+	fixture.restitution = 0.5f;
 
 	b->CreateFixture(&fixture);
-	b->SetGravityScale(0.2);
+	b->SetGravityScale(0.3);
 	pbody->body = b;
 	pbody->width = pbody->height = radius;
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius, bool isSpecial)
+PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
 
 	if (isSpecial)
 	{
 		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
 	}
 
 	b2BodyDef body;
@@ -352,13 +367,18 @@ PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius, bool isSpe
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial)
+PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
 
 	if (isSpecial)
 	{
 		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
 	}
 
 	b2BodyDef body;
@@ -374,7 +394,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 1.0f; 
+	fixture.restitution = 0.7f; 
 
 	b->CreateFixture(&fixture);
 
@@ -384,9 +404,15 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 
 	return pbody;
 }
-PhysBody* ModulePhysics::Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool boton)
+PhysBody* ModulePhysics::Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
 
 	if (boton)
 	{
@@ -408,7 +434,7 @@ PhysBody* ModulePhysics::Boton(int x, int y, int width, int height, b2BodyType T
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 0.7f;
+	fixture.restitution = 0.5f;
 
 	b->CreateFixture(&fixture);
 
@@ -419,13 +445,18 @@ PhysBody* ModulePhysics::Boton(int x, int y, int width, int height, b2BodyType T
 
 	return pbody;
 }
-PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial)
+PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
 
 	if (isSpecial)
 	{
 		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
 	}
 
 	b2BodyDef body;
@@ -451,7 +482,7 @@ PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2
 	b2FixtureDef fixture;
 	fixture.shape = &rombo;
 	fixture.density = 1.0f;
-	fixture.restitution = 1.0f;  // Rebote
+	fixture.restitution = 0.7f;  // Rebote
 
 	b->CreateFixture(&fixture);
 
@@ -463,9 +494,19 @@ PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2
 }
 
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
 
 	b2BodyDef body;
 	body.type = Type;
@@ -480,7 +521,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 0.5f;
+	fixture.restitution = 0.3f;
 
 	b->CreateFixture(&fixture);
 
@@ -491,9 +532,19 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float rotation)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -520,9 +571,19 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -549,7 +610,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.restitution = 0.5f;
+	fixture.restitution = 0.3f;
 
 	b->CreateFixture(&fixture);
 
@@ -561,9 +622,19 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation)
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton)
 {
 	PhysBody* pbody = new PhysBody();
+
+	if (isSpecial)
+	{
+		pbody->SetAsSpecial();
+	}
+
+	if (boton)
+	{
+		pbody->SetAsBoton();
+	}
 
 	b2BodyDef body;
 	body.type = Type;
@@ -630,7 +701,6 @@ update_status ModulePhysics::PostUpdate()
 	}
 	if (gameOver) {
 
-		ballCount = 0;
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
 
 		DrawText(TextFormat("Score: %d", currentScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 60, 40, WHITE);

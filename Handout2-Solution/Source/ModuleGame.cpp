@@ -7,6 +7,7 @@
 
 int currentScore = 0;
 bool Combo = false;
+int ballCount = 0;
 
 class PhysicEntity
 {
@@ -21,7 +22,7 @@ public:
 	virtual ~PhysicEntity() = default;
 	virtual void Update() = 0;
 
-	// Nuevo método GetBody()
+	// Nuevo mï¿½todo GetBody()
 	PhysBody* GetBody() const
 	{
 		return body;
@@ -41,7 +42,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 12), _listener), texture(_texture)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12, false, false), _listener), texture(_texture)
 	{
 	}
 
@@ -70,7 +71,7 @@ class Box : public PhysicEntity
 {
 public:
 	Box(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50, b2_dynamicBody, 0), _listener)
+		: PhysicEntity(physics->CreateRectangle(_x, _y, 100, 50, b2_dynamicBody, 0, false, false), _listener)
 		, texture(_texture)
 	{
 
@@ -98,7 +99,7 @@ class Flipper : public PhysicEntity
 {
 public:
 	Flipper(ModulePhysics* physics, int _x, int _y, float _rotation, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateFlipper(_x, _y, 80, 20, b2_kinematicBody, _rotation), _listener)
+		: PhysicEntity(physics->CreateFlipper(_x, _y, 80, 20, b2_kinematicBody, _rotation, false, false), _listener)
 		, texture(_texture)
 	{
 
@@ -144,7 +145,7 @@ bool ModuleGame::Start()
 	Bounce = LoadSound("Assets/Bounce.ogg");
 
 	PlayMusicStream(EchameLaCulpa);
-	SetMusicVolume(EchameLaCulpa, 0.0f);
+	SetMusicVolume(EchameLaCulpa, 0.05f);
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -159,7 +160,7 @@ bool ModuleGame::Start()
 
 	entities.emplace_back(new Circle(App->physics, 600, 750, this, circle));
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0, false, false);
 
 	//flippers
 	flipperRightBot = new Flipper(App->physics, 375, 852, 0, this, flipperR);
@@ -172,7 +173,7 @@ bool ModuleGame::Start()
 	kickerForce = 0.0f;
 	kickerChargeTime = 0.0f;
 	kickerActive = false;
-	kickerCollider = App->physics->CreateRectangle(575, 810, 32, 5, b2_staticBody, 0); //kicker
+	kickerCollider = App->physics->CreateRectangle(575, 810, 32, 5, b2_staticBody, 0, false, false); //kicker
 	kickerCollider->listener = this; // Establecer el listener para detectar colisiones
 	
 
@@ -288,7 +289,7 @@ update_status ModuleGame::Update()
 			if (isKickerShrinking) {
 				isKickerGrowing = true; //kicker crece a su estado normal
 				isKickerShrinking = false;
-				// Aplicar impulso a todos los círculos cuando se suelta la tecla
+				// Aplicar impulso a todos los cï¿½rculos cuando se suelta la tecla
 				for (PhysicEntity* entity : entities) {
 					Circle* circleEntity = dynamic_cast<Circle*>(entity);
 					if (circleEntity) {
@@ -361,13 +362,13 @@ update_status ModuleGame::Update()
 			// Calcular la magnitud de la velocidad
 			float speed = currentVelocity.Length();
 
-			// Si la velocidad es mayor que el límite, ajustar la velocidad
+			// Si la velocidad es mayor que el lï¿½mite, ajustar la velocidad
 			if (speed > 15)
 			{
 				// Normalizar la velocidad (esto cambia el vector original)
 				currentVelocity.Normalize();
 
-				// Escalar la velocidad normalizada por el máximo permitido
+				// Escalar la velocidad normalizada por el mï¿½ximo permitido
 				currentVelocity *= 15;
 
 				// Establecer la nueva velocidad
@@ -426,19 +427,7 @@ update_status ModuleGame::Update()
 		return UPDATE_CONTINUE;
 	}
 
-	if (IsKeyPressed(KEY_SPACE))
-	{
-		ray_on = !ray_on;
-		ray.x = GetMouseX();
-		ray.y = GetMouseY();
-	}
-
-	if (IsKeyPressed(KEY_ONE))
-	{
-		//entities.emplace_back(new Circle(App->physics, 593, 910, this, circle));
-		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle));
-
-	}
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -450,6 +439,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA->listener == this) 
 	{
+		printf("%d", bodyB->IsBoton());
 		if (bodyB->IsSensor()) { 
 			if (currentScore > 0)
 			{
@@ -463,9 +453,9 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else if (bodyB->IsSpecialObject())
 		{ 
 			PlaySound(Bounce);
-			currentScore *= 1.5; 
+			currentScore += 150; 
 		}
-		if (bodyB->IsBoton())
+		else if (bodyB->IsBoton())
 		{
 			if (!bodyB->IsActivate())
 			{

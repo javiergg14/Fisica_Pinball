@@ -95,15 +95,15 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateCircleRebote(int x, int y, int radius, bool isSpecial);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation);
-	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial);
-	PhysBody* Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool boton);
-	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
-	PhysBody* CreateChain(int x, int y, const int* points, int size);
-	PhysBody* CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation);
+	PhysBody* CreateCircle(int x, int y, int radius, bool isSpecial, bool boton);
+	PhysBody* CreateCircleRebote(int x, int y, int radius, bool isSpecial, bool boton);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
+	PhysBody* CreateRectangleRebote(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
+	PhysBody* Boton(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
+	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation, bool isSpecial, bool boton);
+	PhysBody* CreateChain(int x, int y, const int* points, int size, bool isSpecial, bool boton);
+	PhysBody* CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
 	void ActualitationScore();
 	int ballCount = 0; // num bolas restantes
 	// b2ContactListener ---
