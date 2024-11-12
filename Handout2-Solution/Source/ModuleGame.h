@@ -65,7 +65,10 @@ public:
 
 private:
     bool debug;
-    int specialCounter = 0;
     Timer ptimer;
     int countBoton = 0;
+    Music EchameLaCulpa;
+    Sound Beer;
+    Sound GolpePelota;
+    Sound Bounce;
 };

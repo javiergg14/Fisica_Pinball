@@ -173,7 +173,13 @@ bool ModuleGame::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	
+	EchameLaCulpa = LoadMusicStream("Assets/EchameLaCulpa.ogg");
+	Beer = LoadSound("Assets/Beer.ogg");
+	GolpePelota = LoadSound("Assets/GolpePelota.ogg");
+	Bounce = LoadSound("Assets/Bounce.ogg");
+
+	PlayMusicStream(EchameLaCulpa);
+	SetMusicVolume(EchameLaCulpa, 0.3f);
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -210,12 +216,15 @@ bool ModuleGame::Start()
 bool ModuleGame::CleanUp()
 {
 	LOG("Unloading Intro scene");
+	UnloadMusicStream(EchameLaCulpa);
+	UnloadSound(Beer);
 	return true;
 }
 
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	UpdateMusicStream(EchameLaCulpa);
 	if (inMainMenu)  // Si estamos en el menu principal
 	{
 			
@@ -390,15 +399,20 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				currentScore -= 100;
 			}
 		}
+		else if (!bodyB->IsSpecialObject())
+		{
+			PlaySound(GolpePelota);
+		}
 		else if (bodyB->IsSpecialObject())
 		{ 
+			PlaySound(Bounce);
 			currentScore *= 1.5; 
-			specialCounter++;
 		}
-		else if (bodyB->IsBoton())
+		if (bodyB->IsBoton())
 		{
 			if (!bodyB->IsActivate())
 			{
+				PlaySound(Beer);
 				countBoton += 1;
 				bodyB->SetAsActive();
 			}
@@ -411,11 +425,6 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			currentScore *= 3;
 			countBoton = 0;
-		}
-		if (specialCounter == 15)
-		{
-			currentScore *= 2;
-			specialCounter = 0;
 		}
 	}
 	if (currentScore < 0)

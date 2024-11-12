@@ -34,6 +34,9 @@ bool ModulePhysics::Start()
 
 	mostrarTexto = true;
 
+	PerderBola = LoadSound("Assets/PerderBola.ogg");
+	GameOver = LoadSound("Assets/GameOver.ogg");
+
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
@@ -258,6 +261,7 @@ update_status ModulePhysics::PreUpdate()
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
 				ballCount++; //contador
 				if (ballCount <= 3) {
+					PlaySound(PerderBola);
 					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
 					// Reiniciar la velocidad para evitar aceleración infinita
 					pb2->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -286,7 +290,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.2f;
+	fixture.density = 0.4f;
 
 	b->CreateFixture(&fixture);
 
@@ -548,7 +552,7 @@ update_status ModulePhysics::PostUpdate()
 
 	if (IsKeyPressed(KEY_F2))
 	{
-		gameOver = true;
+		ballCount = 3;
 	}
 
 	if (mostrarTexto)	
@@ -560,9 +564,12 @@ update_status ModulePhysics::PostUpdate()
 	//Game Over Handling
 	if (ballCount == 3) {
 		gameOver = true;
+		printf("Suena");
+		PlaySound(GameOver);
 	}
 	if (gameOver) {
 
+		ballCount = 0;
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
 
 		DrawText(TextFormat("Score: %d", currentScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 60, 40, WHITE);
@@ -577,7 +584,6 @@ update_status ModulePhysics::PostUpdate()
 		if (IsKeyPressed(KEY_SPACE)) {
 			mostrarTexto = true;
 			gameOver = false;
-			ballCount = 0;
 			previousScore = currentScore;
 			currentScore = 0;
 		}
@@ -706,6 +712,8 @@ update_status ModulePhysics::PostUpdate()
 bool ModulePhysics::CleanUp()
 {
 	LOG("Destroying physics world");
+
+	UnloadSound(PerderBola);
 
 	// Delete the whole physics world!
 	delete world;

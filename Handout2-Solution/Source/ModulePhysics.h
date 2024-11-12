@@ -116,4 +116,6 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 	Timer rtimer;
+	Sound PerderBola;
+	Sound GameOver;
 };
