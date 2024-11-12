@@ -40,7 +40,7 @@
 
   ## Github
 
- - {[Original Assets](https://github.com/javiergg14/Fisica_Pinball)}
+ - {[Github](https://github.com/javiergg14/Fisica_Pinball)}
 
  ## Diferences
 
