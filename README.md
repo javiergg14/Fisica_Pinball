@@ -20,7 +20,7 @@
  
 ## Controls
 
- - {Right arrow - Right flippers}
+ - {Right arrow - Right flipper}
  - {Left arrow - Left flippers}
  - {Down arrow - Kicker}
  - {F1 - Enable/Disable colliders}
@@ -42,7 +42,7 @@
 
  ## Diferences
 
- - {Double flipper on each site}
+ - {Double flipper on one site}
  - {Obstacle differents locations}
  - {Is 2D}
  - {Diferent combos}
