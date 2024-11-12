@@ -56,8 +56,8 @@ public:
     PhysBody* kickerCollider; //collider kicker
     float kickerForce = 0;  //fuerza del kicker segun el tiempo
     float kickerChargeTime = 0; //tiempo que se ha presionado la tecla
-    const float maxKickerForce = 1.35f; //fuerza max del kickr
-    const float maxChargeTime = 2.25f;   //tiempo max de carga 
+    const float maxKickerForce = 2.7f; //fuerza max del kickr
+    const float maxChargeTime = 1.8f;   //tiempo max de carga 
     bool kickerActive = false; //kicker flag
     float kickerScaleChangeRate = 0.01f; // ratio de cambio de la escala del kicker
     float kickerScale = 1.0f; // escala de dibujo
