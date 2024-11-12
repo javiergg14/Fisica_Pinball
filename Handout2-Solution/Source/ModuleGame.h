@@ -33,8 +33,10 @@ public:
     PhysBody* sensorPrimeraCurva;
     bool sensed;
 
-    PhysicEntity* flipperRight;
-    PhysicEntity* flipperLeft;
+    PhysicEntity* flipperRightTop;
+    PhysicEntity* flipperLeftTop;
+    PhysicEntity* flipperRightBot;
+    PhysicEntity* flipperLeftBot;
 
     Texture2D mainMenu; // textura menu
     Texture2D circle;

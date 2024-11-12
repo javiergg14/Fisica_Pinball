@@ -98,7 +98,7 @@ class Flipper : public PhysicEntity
 {
 public:
 	Flipper(ModulePhysics* physics, int _x, int _y, float _rotation, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateFlipper(_x, _y, 70, 20, b2_kinematicBody, _rotation), _listener)
+		: PhysicEntity(physics->CreateFlipper(_x, _y, 80, 20, b2_kinematicBody, _rotation), _listener)
 		, texture(_texture)
 	{
 
@@ -144,7 +144,7 @@ bool ModuleGame::Start()
 	Bounce = LoadSound("Assets/Bounce.ogg");
 
 	PlayMusicStream(EchameLaCulpa);
-	SetMusicVolume(EchameLaCulpa, 0.1f);
+	SetMusicVolume(EchameLaCulpa, 0.0f);
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -162,8 +162,10 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
 
 	//flippers
-	flipperRight = new Flipper(App->physics, 375, 848, 0, this, flipperR);
-	flipperLeft = new Flipper(App->physics, 250, 848, 0, this, flipperL);
+	flipperRightBot = new Flipper(App->physics, 375, 852, 0, this, flipperR);
+	flipperLeftBot = new Flipper(App->physics, 250, 852, 0, this, flipperL);
+	//flipperRightTop = new Flipper(App->physics, 442, 430, 0, this, flipperR);
+	flipperLeftTop = new Flipper(App->physics, 125, 533, 0, this, flipperL);
 
 
 	//kicker
@@ -212,30 +214,33 @@ update_status ModuleGame::Update()
 	}
 
 	
-
-	float currentAngleLeft = flipperLeft->GetBody()->body->GetAngle();
-	float currentAngleRight = flipperRight->GetBody()->body->GetAngle();
+	float currentAngleLeft = flipperLeftBot->GetBody()->body->GetAngle();
+	float currentAngleRight = flipperRightBot->GetBody()->body->GetAngle();
 
 	if (IsKeyDown(KEY_LEFT))
 	{
 		if (currentAngleLeft > ANGLE_LIMIT_LEFT)
 		{
-			flipperLeft->GetBody()->body->SetAngularVelocity(-10.0f);
+			flipperLeftBot->GetBody()->body->SetAngularVelocity(-10.0f);
+			flipperLeftTop->GetBody()->body->SetAngularVelocity(-10.0f);
 		}
 		else
 		{
-			flipperLeft->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperLeftBot->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperLeftTop->GetBody()->body->SetAngularVelocity(0.0f);
 		}
 	}
 	else
 	{
-		if (currentAngleLeft < 0.4f)
+		if (currentAngleLeft < 0.5f)
 		{
-			flipperLeft->GetBody()->body->SetAngularVelocity(RESTORE_SPEED);
+			flipperLeftBot->GetBody()->body->SetAngularVelocity(RESTORE_SPEED);
+			flipperLeftTop->GetBody()->body->SetAngularVelocity(RESTORE_SPEED);
 		}
 		else
 		{
-			flipperLeft->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperLeftBot->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperLeftTop->GetBody()->body->SetAngularVelocity(0.0f);
 		}
 	}
 
@@ -244,22 +249,26 @@ update_status ModuleGame::Update()
 
 		if (currentAngleRight < ANGLE_LIMIT_RIGHT)
 		{
-			flipperRight->GetBody()->body->SetAngularVelocity(10.0f);
+			//flipperRightTop->GetBody()->body->SetAngularVelocity(10.0f);
+			flipperRightBot->GetBody()->body->SetAngularVelocity(10.0f);
 		}
 		else
 		{
-			flipperRight->GetBody()->body->SetAngularVelocity(0.0f);
+			//flipperRightTop->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperRightBot->GetBody()->body->SetAngularVelocity(0.0f);
 		}
 	}
 	else
 	{
-		if (currentAngleRight > -0.4f)
+		if (currentAngleRight > -0.5f)
 		{
-			flipperRight->GetBody()->body->SetAngularVelocity(-RESTORE_SPEED);
+			//flipperRightTop->GetBody()->body->SetAngularVelocity(-RESTORE_SPEED);
+			flipperRightBot->GetBody()->body->SetAngularVelocity(-RESTORE_SPEED);
 		}
 		else
 		{
-			flipperRight->GetBody()->body->SetAngularVelocity(0.0f);
+			//flipperRightTop->GetBody()->body->SetAngularVelocity(0.0f);
+			flipperRightBot->GetBody()->body->SetAngularVelocity(0.0f);
 		}
 	}
 
@@ -342,6 +351,32 @@ update_status ModuleGame::Update()
 	for (PhysicEntity* entity : entities)
 	{
 		entity->Update();
+
+		b2Body* body = entity->GetBody()->body;  // Obtener el cuerpo de Box2D asociado con la entidad
+		if (body)
+		{
+			// Obtener la velocidad actual
+			b2Vec2 currentVelocity = body->GetLinearVelocity();
+
+			// Calcular la magnitud de la velocidad
+			float speed = currentVelocity.Length();
+
+			// Si la velocidad es mayor que el límite, ajustar la velocidad
+			if (speed > 15)
+			{
+				// Normalizar la velocidad (esto cambia el vector original)
+				currentVelocity.Normalize();
+
+				// Escalar la velocidad normalizada por el máximo permitido
+				currentVelocity *= 15;
+
+				// Establecer la nueva velocidad
+				body->SetLinearVelocity(currentVelocity);
+
+				printf("entra");
+			}
+		}
+
 		if (ray_on)
 		{
 			int hit = entity->RayHit(ray, mouse, normal);
@@ -353,8 +388,10 @@ update_status ModuleGame::Update()
 	}
 
 	// Draw flippers
-	flipperRight->Update();
-	flipperLeft->Update();
+	//flipperRightTop->Update();
+	flipperLeftTop->Update();
+	flipperRightBot->Update();
+	flipperLeftBot->Update();
 
 
 	// ray -----------------
