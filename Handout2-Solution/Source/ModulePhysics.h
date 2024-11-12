@@ -119,5 +119,4 @@ private:
 	Sound PerderBola;
 	Sound GameOver;
 	bool ballBool = false;
-	float torque = 0;
 };
