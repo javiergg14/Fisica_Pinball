@@ -233,12 +233,20 @@ update_status ModuleGame::Update()
 			
 		DrawTexture(mainMenu, 0, 0, WHITE); //dibujar
 
+		mostrarTexto = false;
+
 		//si se presiona espacio
 		if (IsKeyPressed(KEY_SPACE)) {
 			inMainMenu = false; //salir del menu
 		}
 		return UPDATE_CONTINUE;
 	}
+	else
+	{
+		mostrarTexto = true;
+	}
+
+	
 
 	if (IsKeyDown(KEY_A))
 	{
@@ -279,6 +287,7 @@ update_status ModuleGame::Update()
 			{
 				scoreTimer = ptimer.ReadSec();
 			}
+			muerteLuces = false;
 		}
 	}
 	// encojer kicker

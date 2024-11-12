@@ -46,4 +46,6 @@ extern int previousScore;
 extern float scoreTimer;
 extern float ballTimer;
 extern bool gameOver; //flag game over
+extern bool mostrarTexto;
+extern bool muerteLuces;
 

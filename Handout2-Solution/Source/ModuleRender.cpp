@@ -19,8 +19,10 @@ bool ModuleRender::Init()
 	LOG("Creating Renderer context");
 	bool ret = true;
 
-    Brillo1 = LoadTexture("Assets/Brillo2.png");
-    Apagado1 = LoadTexture("Assets/Apagado2.png");
+    Brillo = LoadTexture("Assets/Brillo2.png");
+    Apagado = LoadTexture("Assets/Apagado2.png");
+
+    CaminosPinball = LoadTexture("Assets/CaminosPinball.png");
 
 	return ret;
 }
@@ -43,11 +45,63 @@ update_status ModuleRender::Update()
 
     UpdateTexture();
 
-    if (encendido) {
-        DrawTexture(Apagado1, 431, 592, WHITE);
+    if (mostrarTexto)  
+    {
+        DrawTexture(CaminosPinball, 65, 68, WHITE);
     }
-    if (!encendido) {
-        DrawTexture(Brillo1, 431, 592, WHITE);
+
+    if (mostrarTexto && !muerteLuces)
+    {
+        if (encendido) {
+            DrawTexture(Apagado, 431, 592, WHITE);
+            DrawTexture(Brillo, 420, 613, WHITE);
+            DrawTexture(Apagado, 407, 635, WHITE);
+            DrawTexture(Brillo, 373, 690, WHITE);
+            DrawTexture(Apagado, 428, 766, WHITE);
+            DrawTexture(Brillo, 482, 623, WHITE);
+            DrawTexture(Apagado, 522, 664, WHITE);
+
+            DrawTexture(Apagado, 178, 587, WHITE);
+            DrawTexture(Brillo, 188, 611, WHITE);
+            DrawTexture(Apagado, 201, 633, WHITE);
+            DrawTexture(Brillo, 228, 690, WHITE);
+            DrawTexture(Apagado, 173, 766, WHITE);
+            DrawTexture(Brillo, 118, 623, WHITE);
+            DrawTexture(Apagado, 81, 663, WHITE);
+
+            DrawTexture(Apagado, 300, 820, WHITE);
+
+            DrawTexture(Brillo, 41, 702, WHITE);
+
+            DrawTexture(Apagado, 40, 580, WHITE);
+
+            DrawTexture(Apagado, 154, 416, WHITE);
+        }
+        if (!encendido) {
+            DrawTexture(Brillo, 431, 592, WHITE);
+            DrawTexture(Apagado, 420, 613, WHITE);
+            DrawTexture(Brillo, 407, 635, WHITE);
+            DrawTexture(Apagado, 373, 690, WHITE);
+            DrawTexture(Brillo, 428, 766, WHITE);
+            DrawTexture(Apagado, 482, 623, WHITE);
+            DrawTexture(Brillo, 522, 664, WHITE);
+
+            DrawTexture(Brillo, 178, 587, WHITE);
+            DrawTexture(Apagado, 188, 611, WHITE);
+            DrawTexture(Brillo, 201, 633, WHITE);
+            DrawTexture(Apagado, 228, 690, WHITE);
+            DrawTexture(Brillo, 173, 766, WHITE);
+            DrawTexture(Apagado, 118, 623, WHITE);
+            DrawTexture(Brillo, 81, 663, WHITE);
+
+            DrawTexture(Brillo, 300, 820, WHITE);
+
+            DrawTexture(Apagado, 41, 702, WHITE);
+
+            DrawTexture(Brillo, 40, 580, WHITE);
+
+            DrawTexture(Brillo, 154, 416, WHITE);
+        }
     }
 
 	return UPDATE_CONTINUE;
@@ -68,8 +122,8 @@ update_status ModuleRender::PostUpdate()
 bool ModuleRender::CleanUp()
 {
 	return true;
-    UnloadTexture(Brillo1);
-    UnloadTexture(Apagado1);
+    UnloadTexture(Brillo);
+    UnloadTexture(Apagado);
 }
 
 void ModuleRender::UpdateTexture() {

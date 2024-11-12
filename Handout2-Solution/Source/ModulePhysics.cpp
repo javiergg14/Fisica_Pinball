@@ -12,6 +12,8 @@ int previousScore = 0;
 float scoreTimer = 0;
 float ballTimer = 0;
 bool gameOver = false;	
+bool mostrarTexto = true;
+bool muerteLuces = true;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -36,6 +38,8 @@ bool ModulePhysics::Start()
 
 	PerderBola = LoadSound("Assets/PerderBola.ogg");
 	GameOver = LoadSound("Assets/GameOver.ogg");
+
+	
 
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
@@ -248,6 +252,8 @@ update_status ModulePhysics::PreUpdate()
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
 			ballBool = true;
+
+			muerteLuces = true;
 
 			b2BodyUserData data1 = c->GetFixtureA()->GetBody()->GetUserData();
 			b2BodyUserData data2 = c->GetFixtureB()->GetBody()->GetUserData();
@@ -702,7 +708,6 @@ update_status ModulePhysics::PostUpdate()
 
 			DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), GetMousePosition().x, GetMousePosition().y, RED);
 		}
-
 	}
 
 	return UPDATE_CONTINUE;
