@@ -103,8 +103,7 @@ public:
 	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
-	void ActualitationScore();
-	int ballCount = 0; // num bolas restantes
+	void ActualitationScore(); // num bolas restantes
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

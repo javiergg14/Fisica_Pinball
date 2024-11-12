@@ -14,6 +14,7 @@ float ballTimer = 0;
 bool gameOver = false;	
 bool mostrarTexto = true;
 bool muerteLuces = true;
+int ballCount = 0;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -265,7 +266,8 @@ update_status ModulePhysics::PreUpdate()
 
 			// Verificar si pb2 es la pelota
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
-				ballCount++; //contador
+				ballCount++;//contador
+				Combo = false;
 				if (ballCount <= 5) {
 					PlaySound(PerderBola);
 					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
@@ -570,6 +572,7 @@ update_status ModulePhysics::PostUpdate()
 	//Game Over Handling
 	if (ballCount == 3) {
 		gameOver = true;
+		Combo = false;
 		printf("Suena");
 		PlaySound(GameOver);
 	}

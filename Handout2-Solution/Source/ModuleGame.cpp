@@ -6,6 +6,7 @@
 #include "ModulePhysics.h"
 
 int currentScore = 0;
+bool Combo = false;
 
 class PhysicEntity
 {
@@ -383,6 +384,13 @@ update_status ModuleGame::Update()
 		}
 	}
 
+	if (countBoton == 4 || IsKeyPressed(KEY_F3))
+	{
+		ballCount -= 1;
+		countBoton = 0;
+		Combo = true;
+	}
+
 	if (IsKeyPressed(KEY_F1))
 	{
 		debug = !debug;
@@ -405,11 +413,6 @@ update_status ModuleGame::Update()
 		//entities.emplace_back(new Circle(App->physics, 593, 910, this, circle));
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), this, circle));
 
-	}
-
-	if (IsKeyPressed(KEY_TWO))
-	{
-		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), this, box));
 	}
 
 	return UPDATE_CONTINUE;
@@ -449,11 +452,6 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				bodyB->Desactivte();
 			}
-		}
-		if (countBoton == 4)
-		{
-			currentScore *= 3;
-			countBoton = 0;
 		}
 	}
 	if (currentScore < 0)

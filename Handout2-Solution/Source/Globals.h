@@ -48,4 +48,6 @@ extern float ballTimer;
 extern bool gameOver; //flag game over
 extern bool mostrarTexto;
 extern bool muerteLuces;
+extern int ballCount;
+extern bool Combo;
 

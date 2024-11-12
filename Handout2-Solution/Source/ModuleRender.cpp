@@ -22,6 +22,9 @@ bool ModuleRender::Init()
     Brillo = LoadTexture("Assets/Brillo2.png");
     Apagado = LoadTexture("Assets/Apagado2.png");
 
+    EstrellaBrillo = LoadTexture("Assets/EstrellaEncendida.png");
+    EstrellaApagado = LoadTexture("Assets/EstrellaApagada.png");
+
     CaminosPinball = LoadTexture("Assets/CaminosPinball.png");
 
 	return ret;
@@ -102,8 +105,46 @@ update_status ModuleRender::Update()
 
             DrawTexture(Brillo, 154, 416, WHITE);
         }
-    }
+        if (Combo)
+        {
+            DrawTexture(EstrellaBrillo, 384, 202, WHITE);
+            DrawTexture(EstrellaBrillo, 415, 210, WHITE);
+            DrawTexture(EstrellaBrillo, 445, 221, WHITE);
+            DrawTexture(EstrellaBrillo, 472, 235, WHITE);
 
+            DrawTexture(Brillo, 431, 592, WHITE);
+            DrawTexture(Brillo, 420, 613, WHITE);
+            DrawTexture(Brillo, 407, 635, WHITE);
+            DrawTexture(Brillo, 373, 690, WHITE);
+            DrawTexture(Brillo, 428, 766, WHITE);
+            DrawTexture(Brillo, 482, 623, WHITE);
+            DrawTexture(Brillo, 522, 664, WHITE);
+
+            DrawTexture(Brillo, 178, 587, WHITE);
+            DrawTexture(Brillo, 188, 611, WHITE);
+            DrawTexture(Brillo, 201, 633, WHITE);
+            DrawTexture(Brillo, 228, 690, WHITE);
+            DrawTexture(Brillo, 173, 766, WHITE);
+            DrawTexture(Brillo, 118, 623, WHITE);
+            DrawTexture(Brillo, 81, 663, WHITE);
+
+            DrawTexture(Brillo, 300, 820, WHITE);
+
+            DrawTexture(Brillo, 41, 702, WHITE);
+
+            DrawTexture(Brillo, 40, 580, WHITE);
+
+            DrawTexture(Brillo, 154, 416, WHITE);
+        }
+    }
+    if (IsKeyDown(KEY_F4))
+    {
+        DrawFPS(10, 910);
+    }
+    DrawTexture(EstrellaApagado, 384, 202, WHITE);
+    DrawTexture(EstrellaApagado, 415, 210, WHITE);
+    DrawTexture(EstrellaApagado, 445, 221, WHITE);
+    DrawTexture(EstrellaApagado, 472, 235, WHITE);
 	return UPDATE_CONTINUE;
 }
 
@@ -111,7 +152,7 @@ update_status ModuleRender::Update()
 update_status ModuleRender::PostUpdate()
 {
     // Draw everything in our batch!
-    DrawFPS(10, 10);
+
 
     EndDrawing();
 
