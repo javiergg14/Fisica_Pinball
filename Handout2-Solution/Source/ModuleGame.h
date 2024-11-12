@@ -74,6 +74,7 @@ private:
     Sound Beer;
     Sound GolpePelota;
     Sound Bounce;
+   
 
     const float ANGLE_LIMIT_LEFT = -0.785f;
     const float ANGLE_LIMIT_RIGHT = 0.785f;

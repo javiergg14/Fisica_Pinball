@@ -7,7 +7,7 @@
 
 int currentScore = 0;
 bool Combo = false;
-int ballCount = 0;
+int countCombo = 0;
 
 class PhysicEntity
 {
@@ -194,6 +194,11 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	if (IsKeyPressed(KEY_SPACE))
+	{
+		printf("%d", ballCount);
+	}
+
 	UpdateMusicStream(EchameLaCulpa);
 
 	if (inMainMenu)  // Si estamos en el menu principal
@@ -341,7 +346,6 @@ update_status ModuleGame::Update()
 	vec2i mouse;
 	mouse.x = GetMouseX();
 	mouse.y = GetMouseY();
-	printf("\n x:%d y:%d", mouse.x, mouse.y);
 	int ray_hit = ray.DistanceTo(mouse);
 
 	vec2f normal(0.0f, 0.0f);
@@ -373,8 +377,6 @@ update_status ModuleGame::Update()
 
 				// Establecer la nueva velocidad
 				body->SetLinearVelocity(currentVelocity);
-
-				printf("entra");
 			}
 		}
 
@@ -410,11 +412,14 @@ update_status ModuleGame::Update()
 		}
 	}
 
-	if (countBoton == 4 || IsKeyPressed(KEY_F3))
+	if (countCombo == 15 || IsKeyPressed(KEY_F3))
 	{
-		ballCount -= 1;
-		countBoton = 0;
+		
+		PlaySound(Beer);	
+		ballCount = ballCount - 1;
+		countCombo = 0;
 		Combo = true;
+		printf("%d", ballCount);
 	}
 
 	if (IsKeyPressed(KEY_F1))
@@ -439,7 +444,6 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA->listener == this) 
 	{
-		printf("%d", bodyB->IsBoton());
 		if (bodyB->IsSensor()) { 
 			if (currentScore > 0)
 			{
@@ -454,19 +458,7 @@ void ModuleGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{ 
 			PlaySound(Bounce);
 			currentScore += 150; 
-		}
-		else if (bodyB->IsBoton())
-		{
-			if (!bodyB->IsActivate())
-			{
-				PlaySound(Beer);
-				countBoton += 1;
-				bodyB->SetAsActive();
-			}
-			else
-			{
-				bodyB->Desactivte();
-			}
+			countCombo++;
 		}
 	}
 	if (currentScore < 0)

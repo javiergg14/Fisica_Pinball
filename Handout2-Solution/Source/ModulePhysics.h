@@ -78,7 +78,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
-	bool isSpecial;
+	bool isSpecial = false;
 	bool isBoton;
 	bool active;
 };
@@ -105,8 +105,6 @@ public:
 	PhysBody* CreateChain(int x, int y, const int* points, int size, bool isSpecial, bool boton);
 	PhysBody* CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation, bool isSpecial, bool boton);
 	void ActualitationScore();
-	int ballCount = 0; // num bolas restantes
-	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
 private:

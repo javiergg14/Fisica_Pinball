@@ -14,6 +14,7 @@ float ballTimer = 0;
 bool gameOver = false;	
 bool mostrarTexto = true;
 bool muerteLuces = true;
+int ballCount = 0;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -278,8 +279,7 @@ update_status ModulePhysics::PreUpdate()
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
 				ballCount++;//contador
 				Combo = false;
-				if (ballCount <= 5) {	
-					
+				if (ballCount <= 5) {			
 					PlaySound(PerderBola);
 					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
 					// Reiniciar la velocidad para evitar aceleraci�n infinita
@@ -674,6 +674,11 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, int width, int height, b2Bo
 update_status ModulePhysics::PostUpdate()
 {
 	
+	if (IsKeyPressed(KEY_SPACE))
+	{
+		printf("%d", ballCount);
+	}
+	
 	int displayCount = 3 - ballCount;
 	const char* texto = TextFormat("Bolas restantes: %d", displayCount);
 
@@ -696,11 +701,11 @@ update_status ModulePhysics::PostUpdate()
 	if (ballCount == 3) {
 		gameOver = true;
 		Combo = false;
-		printf("Suena");
 		PlaySound(GameOver);
 	}
 	if (gameOver) {
 
+		ballCount = 0;
 		DrawText("Game Over!  ", SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 - 40, 80, WHITE);
 
 		DrawText(TextFormat("Score: %d", currentScore), SCREEN_WIDTH / 2 - 225, SCREEN_HEIGHT / 2 + 60, 40, WHITE);

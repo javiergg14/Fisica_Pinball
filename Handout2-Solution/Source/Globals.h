@@ -50,5 +50,6 @@ extern bool mostrarTexto;
 extern bool muerteLuces;
 extern int ballCount;
 extern bool Combo;
+extern int countCombo;
 
 
