@@ -568,6 +568,10 @@ update_status ModulePhysics::PostUpdate()
 		DrawText(texto, SCREEN_WIDTH -300, 10, 30, WHITE);
 		DrawText(TextFormat("Score: %d", currentScore), 20, 10, 30, WHITE);
 	}
+
+	b2Body* mouseSelect = nullptr;
+	Vector2 mousePosition = GetMousePosition();
+	b2Vec2 pMousePosition = b2Vec2(PIXEL_TO_METERS(mousePosition.x), PIXEL_TO_METERS(mousePosition.y));
 	
 	//Game Over Handling
 	if (ballCount == 3) {
@@ -699,18 +703,39 @@ update_status ModulePhysics::PostUpdate()
 					mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 				}
 			}
+			if (mouse_joint == nullptr && mouseSelect == nullptr && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+
+				if (f->TestPoint(pMousePosition)) {
+					mouseSelect = b;
+				}
+			}
 
 			// test if the current body contains mouse position
 		}
-		if (mouse_joint)
-		{
+	}
+	if (mouseSelect) {
+		b2MouseJointDef def;
 
-			b2Vec2 pos(PIXEL_TO_METERS(GetMousePosition().x), PIXEL_TO_METERS(GetMousePosition().y));
-			mouse_joint->SetTarget(pos);
+		def.bodyA = ground;
+		def.bodyB = mouseSelect;
+		def.target = pMousePosition;
+		def.damping = 0.5f;
+		def.stiffness = 20.f;
+		def.maxForce = 100.f * mouseSelect->GetMass();
 
+		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+	}
+	else if (mouse_joint && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		mouse_joint->SetTarget(pMousePosition);
+		b2Vec2 anchorPosition = mouse_joint->GetBodyB()->GetPosition();
+		anchorPosition.x = METERS_TO_PIXELS(anchorPosition.x);
+		anchorPosition.y = METERS_TO_PIXELS(anchorPosition.y);
 
-			DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), GetMousePosition().x, GetMousePosition().y, RED);
-		}
+		DrawLine(anchorPosition.x, anchorPosition.y, mousePosition.x, mousePosition.y, RED);
+	}
+	else if (mouse_joint && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
 	}
 
 	return UPDATE_CONTINUE;
