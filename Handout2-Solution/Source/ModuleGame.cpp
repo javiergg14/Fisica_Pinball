@@ -132,6 +132,23 @@ public:
 			30, 62
 	};
 
+	// Pivot 0, 0
+	int flipperLeft[24] = {
+		0, 7,
+		0, 7,
+		7, 0,
+		21, 0,
+		68, 30,
+		74, 38,
+		74, 46,
+		68, 52,
+		60, 52,
+		6, 32,
+		0, 25,
+		0, 7
+	};
+
+
 
 	Flipper(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
 		: PhysicEntity(physics->CreateChain(_x, _y, flipper_chain, 64), _listener)
