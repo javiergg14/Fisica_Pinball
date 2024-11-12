@@ -19,6 +19,9 @@ bool ModuleRender::Init()
 	LOG("Creating Renderer context");
 	bool ret = true;
 
+    Brillo1 = LoadTexture("Assets/Brillo2.png");
+    Apagado1 = LoadTexture("Assets/Apagado2.png");
+
 	return ret;
 }
 
@@ -38,6 +41,15 @@ update_status ModuleRender::Update()
     // not processed until EndDrawing() is called
     BeginDrawing();
 
+    UpdateTexture();
+
+    if (encendido) {
+        DrawTexture(Apagado1, 400, 300, WHITE);
+    }
+    if (!encendido) {
+        DrawTexture(Brillo1, 400, 300, WHITE);
+    }
+
 	return UPDATE_CONTINUE;
 }
 
@@ -56,6 +68,21 @@ update_status ModuleRender::PostUpdate()
 bool ModuleRender::CleanUp()
 {
 	return true;
+    UnloadTexture(Brillo1);
+    UnloadTexture(Apagado1);
+}
+
+void ModuleRender::UpdateTexture() {
+    // Obtener el tiempo transcurrido desde que el programa comenzó
+    float currentTime = GetTime();
+
+    // Comprobar si ha pasado el intervalo de tiempo
+    if ((int)(currentTime / Interval) % 2 == 0) {
+        encendido = true;
+    }
+    else {
+        encendido = false;
+    }
 }
 
 void ModuleRender::SetBackgroundColor(Color color)

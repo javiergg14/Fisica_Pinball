@@ -212,6 +212,8 @@ bool ModuleGame::Start()
 	return ret;
 }
 
+
+
 // Load assets
 bool ModuleGame::CleanUp()
 {
@@ -225,6 +227,7 @@ bool ModuleGame::CleanUp()
 update_status ModuleGame::Update()
 {
 	UpdateMusicStream(EchameLaCulpa);
+
 	if (inMainMenu)  // Si estamos en el menu principal
 	{
 			
