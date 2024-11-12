@@ -136,15 +136,16 @@ update_status ModuleRender::Update()
 
             DrawTexture(Brillo, 154, 416, WHITE);
         }
+        DrawTexture(EstrellaApagado, 384, 202, WHITE);
+        DrawTexture(EstrellaApagado, 415, 210, WHITE);
+        DrawTexture(EstrellaApagado, 445, 221, WHITE);
+        DrawTexture(EstrellaApagado, 472, 235, WHITE);
     }
     if (IsKeyDown(KEY_F4))
     {
         DrawFPS(10, 910);
     }
-    DrawTexture(EstrellaApagado, 384, 202, WHITE);
-    DrawTexture(EstrellaApagado, 415, 210, WHITE);
-    DrawTexture(EstrellaApagado, 445, 221, WHITE);
-    DrawTexture(EstrellaApagado, 472, 235, WHITE);
+
 	return UPDATE_CONTINUE;
 }
 

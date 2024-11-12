@@ -279,10 +279,11 @@ update_status ModulePhysics::PreUpdate()
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
 				ballCount++;//contador
 				Combo = false;
-				if (ballCount <= 5) {
+				if (ballCount <= 5) {	
+					
 					PlaySound(PerderBola);
 					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
-					// Reiniciar la velocidad para evitar aceleración infinita
+					// Reiniciar la velocidad para evitar aceleraciï¿½n infinita
 					pb2->body->SetLinearVelocity(b2Vec2(0, 0));
 					pb2->body->SetAngularVelocity(0);
 				}
@@ -309,7 +310,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.3f;
+	fixture.density = 0.5f;
 
 	b->CreateFixture(&fixture);
 	b->SetGravityScale(0.2);
@@ -339,7 +340,7 @@ PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius, bool isSpe
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 0.3f;
-	fixture.restitution = 1.5f;
+	fixture.restitution = 1.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -373,7 +374,7 @@ PhysBody* ModulePhysics::CreateRectangleRebote(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.restitution = 1.5f; 
+	fixture.restitution = 1.0f; 
 
 	b->CreateFixture(&fixture);
 
@@ -439,18 +440,18 @@ PhysBody* ModulePhysics::CreateRombo(int x, int y, float width, float height, b2
 	b2PolygonShape rombo;
 	b2Vec2 vertices[4];
 
-	// Vértices del rombo (a partir de un cuadrado con width y height)
-	vertices[0].Set(0.0f, height * 0.5f);  // Vértice superior
-	vertices[1].Set(width * 0.5f, 0.0f);   // Vértice derecho
-	vertices[2].Set(0.0f, -height * 0.5f); // Vértice inferior
-	vertices[3].Set(-width * 0.5f, 0.0f);  // Vértice izquierdo
+	// Vï¿½rtices del rombo (a partir de un cuadrado con width y height)
+	vertices[0].Set(0.0f, height * 0.5f);  // Vï¿½rtice superior
+	vertices[1].Set(width * 0.5f, 0.0f);   // Vï¿½rtice derecho
+	vertices[2].Set(0.0f, -height * 0.5f); // Vï¿½rtice inferior
+	vertices[3].Set(-width * 0.5f, 0.0f);  // Vï¿½rtice izquierdo
 
 	rombo.Set(vertices, 4);
 
 	b2FixtureDef fixture;
 	fixture.shape = &rombo;
 	fixture.density = 1.0f;
-	fixture.restitution = 1.5f;  // Rebote
+	fixture.restitution = 1.0f;  // Rebote
 
 	b->CreateFixture(&fixture);
 
@@ -552,7 +553,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 
 	b->CreateFixture(&fixture);
 
-	delete[] p;  // Usar delete[] para liberar memoria de arreglos dinámicos
+	delete[] p;  // Usar delete[] para liberar memoria de arreglos dinï¿½micos
 
 	pbody->body = b;
 	pbody->width = pbody->height = 0;
