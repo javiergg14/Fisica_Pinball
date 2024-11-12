@@ -105,7 +105,7 @@ update_status ModuleRender::Update()
 
             DrawTexture(Brillo, 154, 416, WHITE);
         }
-        if (Combo)
+        if (Combo || IsKeyPressed(KEY_F3))
         {
             DrawTexture(EstrellaBrillo, 384, 202, WHITE);
             DrawTexture(EstrellaBrillo, 415, 210, WHITE);

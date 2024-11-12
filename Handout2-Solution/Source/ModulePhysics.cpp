@@ -81,11 +81,22 @@ bool ModulePhysics::Start()
 	179, 316
 	};
 
-	int pinball2[8] = {
-	153, 404,
-	148, 414,
-	149, 427,
-	146, 433
+	int pinball2[30] = {
+		181, 319,
+		178, 335,
+		175, 352,
+		171, 366,
+		166, 381,
+		160, 396,
+		153, 408,
+		150, 422,
+		148, 433,
+		140, 445,
+		132, 456,
+		122, 461,
+		111, 468,
+		98, 472,
+		87, 475
 	};
 	int pinball3[58] = {
 	68, 417,
@@ -211,7 +222,7 @@ bool ModulePhysics::Start()
 
 	CreateRectangle(x, y / 2, 60, y, b2_staticBody, 0);
 	PhysBody* cadenaPinball1 = CreateChain(0, 0, pinball1, 56);
-	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 8);
+	PhysBody* cadenaPinball2 = CreateChain(0, 0, pinball2, 30);
 	PhysBody* cadenaPinball3 = CreateChain(0, 0, pinball3, 58);
 	PhysBody* cadenaPinball4 = CreateChain(0, 0, pinball4, 146);
 
