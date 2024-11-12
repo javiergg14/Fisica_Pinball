@@ -74,6 +74,14 @@ private:
     Sound Beer;
     Sound GolpePelota;
     Sound Bounce;
+
+    Texture2D Brillo;
+    Texture2D Apagado;
+    Texture2D EstrellaBrillo;
+    Texture2D EstrellaApagado;
+    float Interval = 1.2f;
+    bool encendido = false;
+    bool isDraw = false;
    
 
     const float ANGLE_LIMIT_LEFT = -0.785f;

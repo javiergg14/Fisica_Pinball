@@ -136,6 +136,12 @@ ModuleGame::~ModuleGame()
 // Load assets
 bool ModuleGame::Start()
 {
+	Brillo = LoadTexture("Assets/Brillo2.png");
+	Apagado = LoadTexture("Assets/Apagado2.png");
+
+	EstrellaBrillo = LoadTexture("Assets/EstrellaEncendida.png");
+	EstrellaApagado = LoadTexture("Assets/EstrellaApagada.png");
+	
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -163,10 +169,10 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0, false, false);
 
 	//flippers
-	flipperRightBot = new Flipper(App->physics, 375, 852, 0, this, flipperR);
-	flipperLeftBot = new Flipper(App->physics, 250, 852, 0, this, flipperL);
+	flipperRightBot = new Flipper(App->physics, 375, 855, 0, this, flipperR);
+	flipperLeftBot = new Flipper(App->physics, 250, 855, 0, this, flipperL);
 	//flipperRightTop = new Flipper(App->physics, 442, 430, 0, this, flipperR);
-	flipperLeftTop = new Flipper(App->physics, 125, 533, 0, this, flipperL);
+	flipperLeftTop = new Flipper(App->physics, 125, 536, 0, this, flipperL);
 
 
 	//kicker
@@ -194,6 +200,8 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
+
+	
 	if (IsKeyPressed(KEY_SPACE))
 	{
 		printf("%d", ballCount);
@@ -280,6 +288,98 @@ update_status ModuleGame::Update()
 
 
 	DrawTexture(bg, 0, 0, WHITE);
+
+	UpdateTexture();
+
+if (mostrarTexto && !muerteLuces)
+{
+	if (encendido)
+	{
+		DrawTexture(Apagado, 431, 592, WHITE);
+		DrawTexture(Brillo, 420, 613, WHITE);
+		DrawTexture(Apagado, 407, 635, WHITE);
+		DrawTexture(Brillo, 373, 690, WHITE);
+		DrawTexture(Apagado, 428, 766, WHITE);
+		DrawTexture(Brillo, 482, 623, WHITE);
+		DrawTexture(Apagado, 522, 664, WHITE);
+
+		DrawTexture(Apagado, 178, 587, WHITE);
+		DrawTexture(Brillo, 188, 611, WHITE);
+		DrawTexture(Apagado, 201, 633, WHITE);
+		DrawTexture(Brillo, 228, 690, WHITE);
+		DrawTexture(Apagado, 173, 766, WHITE);
+		DrawTexture(Brillo, 118, 623, WHITE);
+		DrawTexture(Apagado, 81, 663, WHITE);
+
+		DrawTexture(Apagado, 300, 820, WHITE);
+
+		DrawTexture(Brillo, 41, 702, WHITE);
+
+		DrawTexture(Apagado, 40, 580, WHITE);
+
+		DrawTexture(Apagado, 154, 416, WHITE);
+	}
+	if (!encendido) {
+		DrawTexture(Brillo, 431, 592, WHITE);
+		DrawTexture(Apagado, 420, 613, WHITE);
+		DrawTexture(Brillo, 407, 635, WHITE);
+		DrawTexture(Apagado, 373, 690, WHITE);
+		DrawTexture(Brillo, 428, 766, WHITE);
+		DrawTexture(Apagado, 482, 623, WHITE);
+		DrawTexture(Brillo, 522, 664, WHITE);
+
+		DrawTexture(Brillo, 178, 587, WHITE);
+		DrawTexture(Apagado, 188, 611, WHITE);
+		DrawTexture(Brillo, 201, 633, WHITE);
+		DrawTexture(Apagado, 228, 690, WHITE);
+		DrawTexture(Brillo, 173, 766, WHITE);
+		DrawTexture(Apagado, 118, 623, WHITE);
+		DrawTexture(Brillo, 81, 663, WHITE);
+
+		DrawTexture(Brillo, 300, 820, WHITE);
+
+		DrawTexture(Apagado, 41, 702, WHITE);
+
+		DrawTexture(Brillo, 40, 580, WHITE);
+
+		DrawTexture(Brillo, 154, 416, WHITE);
+	}
+	if (Combo || IsKeyPressed(KEY_F3))
+	{
+		DrawTexture(EstrellaBrillo, 384, 202, WHITE);
+		DrawTexture(EstrellaBrillo, 415, 210, WHITE);
+		DrawTexture(EstrellaBrillo, 445, 221, WHITE);
+		DrawTexture(EstrellaBrillo, 472, 235, WHITE);
+
+		DrawTexture(Brillo, 431, 592, WHITE);
+		DrawTexture(Brillo, 420, 613, WHITE);
+		DrawTexture(Brillo, 407, 635, WHITE);
+		DrawTexture(Brillo, 373, 690, WHITE);
+		DrawTexture(Brillo, 428, 766, WHITE);
+		DrawTexture(Brillo, 482, 623, WHITE);
+		DrawTexture(Brillo, 522, 664, WHITE);
+
+		DrawTexture(Brillo, 178, 587, WHITE);
+		DrawTexture(Brillo, 188, 611, WHITE);
+		DrawTexture(Brillo, 201, 633, WHITE);
+		DrawTexture(Brillo, 228, 690, WHITE);
+		DrawTexture(Brillo, 173, 766, WHITE);
+		DrawTexture(Brillo, 118, 623, WHITE);
+		DrawTexture(Brillo, 81, 663, WHITE);
+
+		DrawTexture(Brillo, 300, 820, WHITE);
+
+		DrawTexture(Brillo, 41, 702, WHITE);
+
+		DrawTexture(Brillo, 40, 580, WHITE);
+
+		DrawTexture(Brillo, 154, 416, WHITE);
+	}
+	DrawTexture(EstrellaApagado, 384, 202, WHITE);
+	DrawTexture(EstrellaApagado, 415, 210, WHITE);
+	DrawTexture(EstrellaApagado, 445, 221, WHITE);
+	DrawTexture(EstrellaApagado, 472, 235, WHITE);
+}
 
 	if (!gameOver)
 	{
@@ -473,5 +573,18 @@ void ModuleGame::UpdateScoreTimer()
 	{
 		currentScore += 10;
 		scoreTimer = ptimer.ReadSec();
+	}
+}
+
+void ModuleGame::UpdateTexture() {
+	// Obtener el tiempo transcurrido desde que el programa comenzó
+	float currentTime = GetTime();
+
+	// Comprobar si ha pasado el intervalo de tiempo
+	if ((int)(currentTime / Interval) % 2 == 0) {
+		encendido = true;
+	}
+	else {
+		encendido = false;
 	}
 }

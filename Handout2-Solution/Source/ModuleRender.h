@@ -14,7 +14,6 @@ public:
 	update_status PreUpdate();
 	update_status Update();
 	update_status PostUpdate();
-	void UpdateTexture();
 	bool CleanUp();
 
     void SetBackgroundColor(Color color);
@@ -25,12 +24,7 @@ public:
 
 	Color background;
     Rectangle camera;
-	Texture2D Brillo;
-	Texture2D Apagado;
-	Texture2D EstrellaBrillo;
-	Texture2D EstrellaApagado;
-	float Interval = 1.2f;
+
 	Texture2D CaminosPinball;
-	bool encendido = false;
-	bool isDraw = false;
+
 };
