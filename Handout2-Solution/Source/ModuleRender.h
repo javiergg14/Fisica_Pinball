@@ -57,6 +57,6 @@ public:
 	Texture2D Apagado15;
 	Texture2D Brillo16;
 	Texture2D Apagado16;
-	float Interval = 2.0f;
+	float Interval = 0.7f;
 	bool encendido = false;
 };

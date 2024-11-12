@@ -44,10 +44,10 @@ update_status ModuleRender::Update()
     UpdateTexture();
 
     if (encendido) {
-        DrawTexture(Apagado1, 400, 300, WHITE);
+        DrawTexture(Apagado1, 431, 592, WHITE);
     }
     if (!encendido) {
-        DrawTexture(Brillo1, 400, 300, WHITE);
+        DrawTexture(Brillo1, 431, 592, WHITE);
     }
 
 	return UPDATE_CONTINUE;
