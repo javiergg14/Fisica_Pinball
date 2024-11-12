@@ -309,10 +309,10 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.4f;
+	fixture.density = 0.3f;
 
 	b->CreateFixture(&fixture);
-
+	b->SetGravityScale(0.2);
 	pbody->body = b;
 	pbody->width = pbody->height = radius;
 
@@ -560,6 +560,42 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation)
+{
+	PhysBody* pbody = new PhysBody();
+
+	b2BodyDef body;
+	body.type = Type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = rotation;
+	body.userData.pointer = reinterpret_cast<uintptr_t>(pbody);
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.restitution = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	b->SetGravityScale(0.0f);
+
+	b->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+	b->SetLinearDamping(1.0f);
+
+	b->SetAwake(false);
+
+	b->SetFixedRotation(true);
+
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
+	return pbody;
+}
 
 
 

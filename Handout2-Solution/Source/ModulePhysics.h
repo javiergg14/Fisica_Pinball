@@ -103,7 +103,9 @@ public:
 	PhysBody* CreateRombo(int x, int y, float width, float height, b2BodyType Type, float rotation, bool isSpecial);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float rotation);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
-	void ActualitationScore(); // num bolas restantes
+	PhysBody* CreateFlipper(int x, int y, int width, int height, b2BodyType Type, float rotation);
+	void ActualitationScore();
+	int ballCount = 0; // num bolas restantes
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -117,4 +119,5 @@ private:
 	Sound PerderBola;
 	Sound GameOver;
 	bool ballBool = false;
+	float torque = 0;
 };

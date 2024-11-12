@@ -97,83 +97,30 @@ private:
 class Flipper : public PhysicEntity
 {
 public:
-	// Pivot 0, 0
-	static constexpr int flipper_chain[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-	};
-
-	// Pivot 0, 0
-	int flipperLeft[24] = {
-		0, 7,
-		0, 7,
-		7, 0,
-		21, 0,
-		68, 30,
-		74, 38,
-		74, 46,
-		68, 52,
-		60, 52,
-		6, 32,
-		0, 25,
-		0, 7
-	};
-
-
-
-	Flipper(ModulePhysics* physics, int _x, int _y, Module* _listener, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(_x, _y, flipper_chain, 64), _listener)
+	Flipper(ModulePhysics* physics, int _x, int _y, float _rotation, Module* _listener, Texture2D _texture)
+		: PhysicEntity(physics->CreateFlipper(_x, _y, 70, 20, b2_kinematicBody, _rotation), _listener)
 		, texture(_texture)
 	{
+
 	}
 
 	void Update() override
 	{
 		int x, y;
 		body->GetPhysicPosition(x, y);
-		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+		DrawTexturePro(texture, Rectangle{ 0, 0, (float)texture.width, (float)texture.height },
+			Rectangle{ (float)x, (float)y, (float)texture.width, (float)texture.height },
+			Vector2{ (float)texture.width / 2.0f, (float)texture.height / 2.0f }, body->GetRotation() * RAD2DEG, WHITE);
 	}
 
-	void ApplyTorquee(float torque)
+	int RayHit(vec2<int> ray, vec2<int> mouse, vec2<float>& normal) override
 	{
-		body->body->ApplyTorque(torque, true);
+		return body->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);;
 	}
 
 private:
 	Texture2D texture;
 };
-
-
 
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -197,7 +144,7 @@ bool ModuleGame::Start()
 	Bounce = LoadSound("Assets/Bounce.ogg");
 
 	PlayMusicStream(EchameLaCulpa);
-	SetMusicVolume(EchameLaCulpa, 0.3f);
+	SetMusicVolume(EchameLaCulpa, 0.1f);
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -215,8 +162,8 @@ bool ModuleGame::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 1, 0);
 
 	//flippers
-	flipperRight = new Flipper(App->physics, 342, 823, this, flipperR);
-	flipperLeft = new Flipper(App->physics, 210, 823, this, flipperL);
+	flipperRight = new Flipper(App->physics, 373, 834, 0, this, flipperR);
+	flipperLeft = new Flipper(App->physics, 250, 834, 0, this, flipperL);
 
 
 	//kicker
@@ -266,13 +213,54 @@ update_status ModuleGame::Update()
 
 	
 
-	if (IsKeyDown(KEY_A))
-	{
-		// Calcular el torque que corresponde a la fuerza aplicada en el punto
-		float torque = 10;  // Suponiendo que la fuerza se aplica a lo largo del eje X
+	float currentAngleLeft = flipperLeft->GetBody()->body->GetAngle();
+	float currentAngleRight = flipperRight->GetBody()->body->GetAngle();
 
-		// Aplicar el torque al flipper
-		//flipperLeft->ApplyTorque(torque);
+	if (IsKeyDown(KEY_LEFT))
+	{
+		if (currentAngleLeft > ANGLE_LIMIT_LEFT)
+		{
+			flipperLeft->GetBody()->body->SetAngularVelocity(-10.0f);
+		}
+		else
+		{
+			flipperLeft->GetBody()->body->SetAngularVelocity(0.0f);
+		}
+	}
+	else
+	{
+		if (currentAngleLeft < 0.0f)
+		{
+			flipperLeft->GetBody()->body->SetAngularVelocity(RESTORE_SPEED);
+		}
+		else
+		{
+			flipperLeft->GetBody()->body->SetAngularVelocity(0.0f);
+		}
+	}
+
+	if (IsKeyDown(KEY_RIGHT))
+	{
+
+		if (currentAngleRight < ANGLE_LIMIT_RIGHT)
+		{
+			flipperRight->GetBody()->body->SetAngularVelocity(10.0f);
+		}
+		else
+		{
+			flipperRight->GetBody()->body->SetAngularVelocity(0.0f);
+		}
+	}
+	else
+	{
+		if (currentAngleRight > 0.0f)
+		{
+			flipperRight->GetBody()->body->SetAngularVelocity(-RESTORE_SPEED);
+		}
+		else
+		{
+			flipperRight->GetBody()->body->SetAngularVelocity(0.0f);
+		}
 	}
 
 
