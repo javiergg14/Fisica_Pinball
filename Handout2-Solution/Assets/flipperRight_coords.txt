@@ -1,5 +1,5 @@
 // Pivot 0, 0
-int flipperRight[4] = {
+int flipperRight[28] = {
 	3, 32,
 	0, 40,
 	0, 40,
@@ -17,7 +17,7 @@ int flipperRight[4] = {
 };
 
 // Pivot 0.000000, 0.000000
-float flipperRight[4] = {
+float flipperRight[28] = {
 	0.040000f, 0.592593f,
 	0.000000f, 0.740741f,
 	0.000000f, 0.740741f,
