@@ -241,14 +241,14 @@ bool ModulePhysics::Start()
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
-
 	
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
 		
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
-			ballTimer = 0;
+			ballBool = true;
+
 			b2BodyUserData data1 = c->GetFixtureA()->GetBody()->GetUserData();
 			b2BodyUserData data2 = c->GetFixtureB()->GetBody()->GetUserData();
 
@@ -260,7 +260,7 @@ update_status ModulePhysics::PreUpdate()
 			// Verificar si pb2 es la pelota
 			if (pb2 && pb2->body) { //si la bola cae / toca el sensor
 				ballCount++; //contador
-				if (ballCount <= 3) {
+				if (ballCount <= 5) {
 					PlaySound(PerderBola);
 					pb2->body->SetTransform(b2Vec2(PIXEL_TO_METERS(SCREEN_WIDTH - 1), PIXEL_TO_METERS(SCREEN_HEIGHT - 4)), pb2->body->GetAngle());
 					// Reiniciar la velocidad para evitar aceleración infinita

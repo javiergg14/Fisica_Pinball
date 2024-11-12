@@ -118,4 +118,5 @@ private:
 	Timer rtimer;
 	Sound PerderBola;
 	Sound GameOver;
+	bool ballBool = false;
 };
